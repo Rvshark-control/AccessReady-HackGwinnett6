@@ -123,6 +123,6 @@ Initial accessibility checks found a few captions just below the contrast thresh
 - Desktop Chromium at 1440 × 1000; Chromium with iPhone 13 viewport/touch emulation at 390 × 844 CSS pixels.
 - Browser automation ran on Linux. No native Windows browser automation, Safari/Firefox tests, physical-device testing, real assistive-technology testing, or full manual WCAG audit was performed.
 - No live provider data, actual accessibility verification, medical advice, real appointment booking, or production verification workflow is included.
-- The app is prepared for Vercel, but no deployment or GitHub repository creation/push has been performed.
+- Source repository: [Rvshark-control/AccessReady-HackGwinnett6](https://github.com/Rvshark-control/AccessReady-HackGwinnett6), branch `main`. The destination's original README commit is preserved; repository setup changed documentation only. The app is prepared for Vercel, but no deployment has been performed.
 
 Screenshots and browser reports are generated under ignored `test-results/` and `playwright-report/` directories. The latest HTML report corresponds to the complete official Google Chrome run.

@@ -1,6 +1,6 @@
-# AccessReady
+# AccessReady — HackGwinnett 6
 
-A complete, local-first hackathon demo for finding healthcare facilities that fit a person's specific accessibility requirements.
+AccessReady helps patients compare their accessibility requirements with medical facility accommodations before arriving. This complete, local-first hackathon demo shows supported needs, barriers, and details requiring confirmation using synthetic data.
 
 **All facilities, locations, contact details, accommodation evidence, and verification statuses are synthetic. This is not a provider directory for arranging real care.**
 
@@ -194,46 +194,38 @@ See [VERIFICATION.md](VERIFICATION.md) for actual results and limitations. Brows
 - Self-reported information is deliberately conservative: it counts as unknown until verified.
 - Automated accessibility checks cannot establish full WCAG 2.2 AA compliance. A full manual audit, assistive-technology evaluation, and user research remain future work.
 
-## Git safety and a future GitHub transfer
+## Repository and source transfer
 
-This rebuild is in the isolated local worktree `/Workshop/accessready-v2` on branch `rebuild/accessready-v2`. The existing backend, integration checkout, and `main` branch are preserved. No GitHub repository has been created and nothing has been pushed.
-
-Inspect the local delivery:
+The project repository is [Rvshark-control/AccessReady-HackGwinnett6](https://github.com/Rvshark-control/AccessReady-HackGwinnett6), with the completed app on **main**. The repository's initial commit is preserved in the app's history.
 
 ```bash
-git branch --show-current
-git log -1 --oneline
-git status --short
+git clone https://github.com/Rvshark-control/AccessReady-HackGwinnett6.git
+cd AccessReady-HackGwinnett6
+npm ci
+npm run dev
 ```
 
-When you choose to create a GitHub repository, create an **empty** repository in your own account. Then add it as a separate remote so the existing `origin` remains intact:
+The original development workspace remains in `/Workshop/accessready-v2` on branch `rebuild/accessready-v2`. Its separate `publish` remote points to this repository; the previous `origin`, integration checkout, and local `main` branch are preserved.
+
+For a standalone source archive:
 
 ```bash
-git remote add publish https://github.com/YOUR_ACCOUNT/YOUR_REPOSITORY.git
-git push -u publish rebuild/accessready-v2
+git archive --format=zip --output=accessready-v2.zip HEAD
 ```
 
-Select `rebuild/accessready-v2` as that new repository's default branch if desired. No force push or changes to the previous `main` branch are needed. Use your normal GitHub authentication; no tokens belong in this project.
-
-For a repository-free source transfer:
-
-```bash
-git archive --format=zip --output=/tmp/accessready-v2.zip rebuild/accessready-v2
-```
-
-Extract the archive elsewhere, run `npm ci`, and follow the run commands above. A worktree's `.git` file points to the original local repository, so use the archive instead of copying that pointer to a different machine.
+Extract the archive elsewhere, run `npm ci`, and follow the run commands above. A worktree's `.git` file points to the original local repository, so use the archive instead of copying that pointer to another machine.
 
 ## Deploy to Vercel when ready
 
 Nothing is deployed automatically by this project.
 
-1. Push the completed branch to your chosen repository when ready.
-2. In Vercel, import that repository and choose `rebuild/accessready-v2`.
+1. In Vercel, import **Rvshark-control/AccessReady-HackGwinnett6**.
+2. Choose **main** as the production branch.
 3. Use the **Next.js** framework preset and the repository root as the root directory. The archive/branch contains the app at its root.
 4. Select Node.js **22.x** or **24.x**. Keep the build command `npm run build`; use `npm ci` to install.
 5. Leave the output directory at Next.js's default. No environment variables or secrets are required.
 6. Deploy. Check `/api/health`, `/api/clinics`, and the two-minute demo at the deployment URL.
 
-Alternatively, the official Vercel CLI can deploy the finished local directory when you decide to publish, without requiring a GitHub repository. Follow the CLI's account/project prompts. Publication has not been performed here.
+Alternatively, the official Vercel CLI can deploy the finished local directory when you decide to publish, without requiring a GitHub repository. Follow the CLI's account/project prompts. Vercel deployment has not been performed here.
 
 The JSON fixture is imported into the server bundle, so API routes do not depend on external filesystem paths or development-only data files.
