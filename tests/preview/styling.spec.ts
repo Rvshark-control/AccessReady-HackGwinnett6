@@ -1,7 +1,8 @@
 import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 
-const base = "/ports/3100/accessready-v2";
+const workspacePrefix = `/ports/${Number(process.env.ACCESSREADY_PREVIEW_PORT ?? "4173")}`;
+const base = `${workspacePrefix}/accessready-v2`;
 
 test("forwarded preview retains styling, fonts, navigation, and the complete demo", async ({ page }, testInfo) => {
   const failedResponses: string[] = [];
@@ -14,7 +15,9 @@ test("forwarded preview retains styling, fonts, navigation, and the complete dem
   page.on("request", (request) => {
     if (request.url().includes("/api/")) apiCalls.push(new URL(request.url()).pathname);
   });
-  const homepage = await page.goto(`${base}/`);
+  // Exercise the exact root URL opened by the workspace's Ports button.
+  const homepage = await page.goto(`${workspacePrefix}/`);
+  await expect(page).toHaveURL(new RegExp(`${base}$`));
   expect(homepage?.headers()["cache-control"]).toContain("no-store");
   await expect(page.getByRole("heading", { level: 1 })).toContainText("Care that sees");
   await page.evaluate(() => document.fonts.ready);
@@ -69,7 +72,7 @@ test("forwarded preview retains styling, fonts, navigation, and the complete dem
 });
 
 test("bare port visits redirect without caching stale HTML or duplicated prefixes", async ({ request }) => {
-  for (const path of ["/ports/3100", "/ports/3100/"]) {
+  for (const path of [workspacePrefix, `${workspacePrefix}/`]) {
     const response = await request.get(path, { maxRedirects: 0 });
     expect(response.status()).toBe(302);
     expect(response.headers().location).toBe(base);

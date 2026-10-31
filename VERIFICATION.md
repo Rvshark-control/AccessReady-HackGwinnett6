@@ -17,6 +17,7 @@ Verified on October 31, 2026 in the isolated `rebuild/accessready-v2` worktree.
 | Workspace forwarding regression | 2 passed in Chromium and 2 passed in official Chrome; desktop and mobile flows through a proxy that strips `/ports/3100` |
 | Cache and fresh-path regression | 4 passed in official Chrome after moving the preview to `/ports/3100/accessready-v2`; HTML, RSC, CSS, and redirects return `no-store` |
 | Windows Chrome asset delivery | The workspace proxy log records HTTP 200 for the user's corrected page, stylesheet, both bundled fonts, and JavaScript requests from Windows Chrome |
+| Port 4173 entry point | Chrome regression passed starting from the Ports button's root URL; the user confirmed port 4173 works, and the port 3100 server was stopped |
 | Final visual adjustments | Rebuilt successfully, then reran the four affected homepage/full-demo desktop/mobile scenarios: 4 passed |
 | Automated accessibility | No axe violations for the selected WCAG A/AA rules in the tested page states, on both desktop and mobile |
 | Tailwind and fonts | Served CSS returned HTTP 200; computed Tailwind colors, custom layout styles, and loaded local fonts were verified in Chromium |
@@ -39,6 +40,8 @@ The hosted workspace proxy itself requires the user's authenticated browser sess
 The bare `/ports/3100/` homepage also retained an older cached response with obsolete, unprefixed `/_next/` asset URLs. The user's Windows Chrome requests for those assets returned 404 even after the origin server had been corrected. The preview now uses the distinct path `/ports/3100/accessready-v2`, with all preview responses marked `private, no-store, max-age=0, must-revalidate`. The preview build is isolated in `.next-preview-v2`; ordinary local/Vercel builds retain their normal behavior.
 
 The updated production preview build passed, followed by four official Chrome regression checks in 16.5 seconds. The tests verify the fresh path, correct asset URLs, root redirects, HTML/RSC/CSS cache prevention, and the desktop/mobile demo. After the user opened the new URL, the real workspace log recorded successful Windows Chrome requests for its stylesheet, fonts, and scripts. This establishes delivery to that browser; it is separate from the automated rendering checks performed on Linux.
+
+The live preview subsequently moved to port 4173 so the Ports button opens a fresh address. The build passed and the Chrome regression completed successfully with `ACCESSREADY_PREVIEW_PORT=4173`, starting navigation at `/ports/4173/` and following its redirect into the app. Preview builds now use separate `.next-preview-PORT` directories to preserve other running previews. The user confirmed that 4173 works and requested that 3100 be stopped; only 4173 remains listening.
 
 ## What was exercised
 
@@ -71,13 +74,13 @@ npm run test:e2e
 
 The browser suite starts and stops its own production server on port 3100. Keep that port free, or set `PLAYWRIGHT_PORT` to another port.
 
-After building the preview for `/ports/3100/accessready-v2`, run its separate regression:
+After building the preview for `/ports/4173/accessready-v2`, run its separate regression:
 
 ```bash
 npm run test:e2e:preview
 ```
 
-It uses ports 3199 and 3200 and leaves the live preview on 3100 running. Set `PLAYWRIGHT_CHROMIUM_EXECUTABLE` to a Google Chrome executable to run either suite with that browser.
+It uses ports 3199 and 3200 and leaves the live preview on 4173 running. Set `PLAYWRIGHT_CHROMIUM_EXECUTABLE` to a Google Chrome executable to run either suite with that browser.
 
 This minimal Linux host had no system fonts or Fontconfig configuration. Its first browser attempt crashed in Chromium's font renderer. Locally bundled, licensed DM Sans and Lora fonts and the optional test configuration resolved that environment failure:
 

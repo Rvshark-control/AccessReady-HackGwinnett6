@@ -1,5 +1,8 @@
 import { defineConfig, devices } from "@playwright/test";
 
+const previewPort = Number(process.env.ACCESSREADY_PREVIEW_PORT ?? "4173");
+const workspacePrefix = `/ports/${previewPort}`;
+
 export default defineConfig({
   testDir: "./tests/preview",
   workers: 2,
@@ -22,13 +25,13 @@ export default defineConfig({
   webServer: [
     {
       command: "node scripts/preview-server.mjs 3199",
-      env: { NEXT_PUBLIC_ACCESSREADY_BASE_PATH: "/ports/3100/accessready-v2" },
+      env: { NEXT_PUBLIC_ACCESSREADY_BASE_PATH: `${workspacePrefix}/accessready-v2` },
       url: "http://127.0.0.1:3199/accessready-v2/api/health",
       reuseExistingServer: false,
     },
     {
-      command: "node tests/support/port-proxy.mjs 3200 3199 /ports/3100",
-      url: "http://127.0.0.1:3200/ports/3100/accessready-v2/api/health",
+      command: `node tests/support/port-proxy.mjs 3200 3199 ${workspacePrefix}`,
+      url: `http://127.0.0.1:3200${workspacePrefix}/accessready-v2/api/health`,
       reuseExistingServer: false,
     },
   ],

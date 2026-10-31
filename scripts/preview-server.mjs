@@ -2,7 +2,7 @@ import http from "node:http";
 import { fileURLToPath } from "node:url";
 import next from "next";
 
-const port = Number(process.argv[2] ?? "3100");
+const port = Number(process.argv[2] ?? "4173");
 const basePath = process.env.NEXT_PUBLIC_ACCESSREADY_BASE_PATH;
 if (!Number.isInteger(port) || port < 1024 || port > 65535 || !/^\/ports\/[1-9]\d*(?:\/[a-zA-Z0-9_-]+)*$/.test(basePath ?? "")) {
   throw new Error("Set NEXT_PUBLIC_ACCESSREADY_BASE_PATH=/ports/PORT/accessready-v2 and choose a valid listening port.");

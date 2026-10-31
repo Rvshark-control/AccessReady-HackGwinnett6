@@ -2,7 +2,7 @@ import { spawn } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 
-const port = Number(process.argv[2] ?? "3100");
+const port = Number(process.argv[2] ?? "4173");
 if (!Number.isInteger(port) || port < 1024 || port > 65535) {
   console.error("Choose an available port from 1024 through 65535.");
   process.exit(1);
