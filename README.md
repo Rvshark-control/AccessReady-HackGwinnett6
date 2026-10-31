@@ -36,7 +36,9 @@ To view the app through this workspace's **Ports** panel, including from Google 
 npm run preview:ports -- 3100
 ```
 
-Open **Ports → 3100 → Open in Browser**. This builds a separate production preview at `/ports/3100/`, including the correct prefixes for styles, fonts, links, and API calls. The workspace removes that prefix before forwarding requests, so the preview server restores it for Next.js and handles redirects without duplicating the prefix. The usual root-path build remains separate in `.next`; the preview uses `.next-preview`. You can pass a different available port if needed. No GitHub repository or deployment is required.
+Open **Ports → 3100 → Open in Browser** and use the path **`/ports/3100/accessready-v2`** on that workspace host. This builds a separate production preview with the correct prefixes for styles, fonts, links, and API calls. Uncached visits to the bare port URL redirect to this path; use the full path directly if the earlier homepage is still cached.
+
+The workspace removes `/ports/3100` before forwarding requests, so the preview server restores that prefix for Next.js and handles redirects without duplicating it. Preview responses use `Cache-Control: private, no-store` to prevent old HTML and JavaScript from being mixed across builds. The usual root-path build remains separate in `.next`; the preview uses `.next-preview-v2`. You can pass a different available port if needed. No GitHub repository or deployment is required.
 
 The build and development commands explicitly use Next.js's webpack integration with the standard Tailwind 4 PostCSS plugin. The global stylesheet imports Tailwind through `@import "tailwindcss"`. DM Sans and Lora are bundled locally through `next/font/local`, with their SIL Open Font Licenses in `public/fonts/`. Styling and fonts are served by the app; there are no external font requests.
 
@@ -160,7 +162,7 @@ After running the port-preview build, verify the workspace-specific path handlin
 npm run test:e2e:preview
 ```
 
-This regression uses ports 3199 and 3200, so the live preview on 3100 can stay open. It reproduces the workspace's prefix removal and redirect rewriting, then checks CSS response types, computed Tailwind styles, loaded fonts, the full demo, comparison, and page reloads. Its fixture expects a preview built for `/ports/3100`.
+This regression uses ports 3199 and 3200, so the live preview on 3100 can stay open. It reproduces the workspace's prefix removal and redirect rewriting, then checks CSS response types, computed Tailwind styles, loaded fonts, the full demo, comparison, page reloads, and cache prevention for HTML, RSC, CSS, and redirects. Its fixture expects a preview built for `/ports/3100/accessready-v2`.
 
 To run either suite with an installed Google Chrome browser instead of Playwright's bundled Chromium, set `PLAYWRIGHT_CHROMIUM_EXECUTABLE` to that Chrome executable's path. The optional font configuration above is still needed on this minimal Linux host.
 

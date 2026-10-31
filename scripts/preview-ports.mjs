@@ -9,7 +9,7 @@ if (!Number.isInteger(port) || port < 1024 || port > 65535) {
 }
 const projectDirectory = fileURLToPath(new URL("../", import.meta.url));
 const nextCli = path.join(projectDirectory, "node_modules/next/dist/bin/next");
-const previewEnvironment = { ...process.env, NEXT_PUBLIC_ACCESSREADY_BASE_PATH: `/ports/${port}` };
+const previewEnvironment = { ...process.env, NEXT_PUBLIC_ACCESSREADY_BASE_PATH: `/ports/${port}/accessready-v2` };
 let child;
 for (const signal of ["SIGINT", "SIGTERM"]) {
   process.on(signal, () => child?.kill(signal));
@@ -27,7 +27,7 @@ function run(args, executable = nextCli) {
 }
 try {
   await run(["build", "--webpack"]);
-  console.log(`\nOpen port ${port} in the workspace Ports panel. Preview path: /ports/${port}/\n`);
+  console.log(`\nOpen port ${port} in the workspace Ports panel. Preview path: ${previewEnvironment.NEXT_PUBLIC_ACCESSREADY_BASE_PATH}\n`);
   await run([String(port)], path.join(projectDirectory, "scripts/preview-server.mjs"));
 } catch (error) {
   console.error(error.message);

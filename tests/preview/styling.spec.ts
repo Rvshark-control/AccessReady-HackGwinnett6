@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 
-const base = "/ports/3100";
+const base = "/ports/3100/accessready-v2";
 
 test("forwarded preview retains styling, fonts, navigation, and the complete demo", async ({ page }, testInfo) => {
   const failedResponses: string[] = [];
@@ -14,7 +14,8 @@ test("forwarded preview retains styling, fonts, navigation, and the complete dem
   page.on("request", (request) => {
     if (request.url().includes("/api/")) apiCalls.push(new URL(request.url()).pathname);
   });
-  await page.goto(`${base}/`);
+  const homepage = await page.goto(`${base}/`);
+  expect(homepage?.headers()["cache-control"]).toContain("no-store");
   await expect(page.getByRole("heading", { level: 1 })).toContainText("Care that sees");
   await page.evaluate(() => document.fonts.ready);
   expect(await page.evaluate(() => [...document.fonts].filter((font) => font.status === "loaded").length)).toBeGreaterThanOrEqual(2);
@@ -28,6 +29,7 @@ test("forwarded preview retains styling, fonts, navigation, and the complete dem
     const response = await page.request.get(url);
     expect(response.status()).toBe(200);
     expect(response.headers()["content-type"]).toContain("text/css");
+    expect(response.headers()["cache-control"]).toContain("no-store");
     expect(await response.text()).toContain(".hero-grid");
   }
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
@@ -64,4 +66,24 @@ test("forwarded preview retains styling, fonts, navigation, and the complete dem
   expect(apiCalls.every((path) => path.startsWith(`${base}/api/`))).toBe(true);
   expect(failedResponses).toEqual([]);
   expect(pageErrors).toEqual([]);
+});
+
+test("bare port visits redirect without caching stale HTML or duplicated prefixes", async ({ request }) => {
+  for (const path of ["/ports/3100", "/ports/3100/"]) {
+    const response = await request.get(path, { maxRedirects: 0 });
+    expect(response.status()).toBe(302);
+    expect(response.headers().location).toBe(base);
+    expect(response.headers()["cache-control"]).toContain("no-store");
+  }
+  const page = await request.get(`${base}/`);
+  expect(page.status()).toBe(200);
+  const html = await page.text();
+  expect(html).toContain(`${base}/_next/static/css/`);
+  expect(html).not.toContain('href="/_next/');
+  expect(html).not.toContain('src="/_next/');
+  // Flight and HTML responses must both stay out of intermediary caches.
+  const flight = await request.get(`${base}?_rsc=preview-test`, { headers: { RSC: "1" } });
+  expect(flight.status()).toBe(200);
+  expect(flight.headers()["content-type"]).toContain("text/x-component");
+  expect(flight.headers()["cache-control"]).toContain("no-store");
 });

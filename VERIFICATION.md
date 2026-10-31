@@ -15,6 +15,8 @@ Verified on October 31, 2026 in the isolated `rebuild/accessready-v2` worktree.
 | Full browser suite | 14 passed, 0 failed; seven scenarios each on desktop and mobile Chromium |
 | Official Google Chrome | Full suite: 14 passed, 0 failed using Google Chrome for Testing 156.0.8078.80 on Linux |
 | Workspace forwarding regression | 2 passed in Chromium and 2 passed in official Chrome; desktop and mobile flows through a proxy that strips `/ports/3100` |
+| Cache and fresh-path regression | 4 passed in official Chrome after moving the preview to `/ports/3100/accessready-v2`; HTML, RSC, CSS, and redirects return `no-store` |
+| Windows Chrome asset delivery | The workspace proxy log records HTTP 200 for the user's corrected page, stylesheet, both bundled fonts, and JavaScript requests from Windows Chrome |
 | Final visual adjustments | Rebuilt successfully, then reran the four affected homepage/full-demo desktop/mobile scenarios: 4 passed |
 | Automated accessibility | No axe violations for the selected WCAG A/AA rules in the tested page states, on both desktop and mobile |
 | Tailwind and fonts | Served CSS returned HTTP 200; computed Tailwind colors, custom layout styles, and loaded local fonts were verified in Chromium |
@@ -32,7 +34,11 @@ The actual stripped stylesheet request returned **404**. The preview-only adapte
 
 `tests/support/port-proxy.mjs` reproduces the path and redirect behavior read from this workspace's proxy implementation. The committed browser regression runs through that proxy and checks loaded CSS/fonts, computed Tailwind styling, API prefixes, demo scores, details, comparison, reload persistence, accessibility, and canonical redirects. Both official Chrome and Chromium passed with zero failed HTTP responses or page errors.
 
-The hosted workspace proxy itself requires the user's authenticated browser session; the automated regression reproduces its routing behavior locally. Native Windows Chrome execution is not claimed. [WINDOWS.md](WINDOWS.md) includes native Windows run and verification commands.
+The hosted workspace proxy itself requires the user's authenticated browser session; the automated regression reproduces its routing behavior locally. Native Windows Chrome automation was not performed. [WINDOWS.md](WINDOWS.md) includes native Windows run and verification commands.
+
+The bare `/ports/3100/` homepage also retained an older cached response with obsolete, unprefixed `/_next/` asset URLs. The user's Windows Chrome requests for those assets returned 404 even after the origin server had been corrected. The preview now uses the distinct path `/ports/3100/accessready-v2`, with all preview responses marked `private, no-store, max-age=0, must-revalidate`. The preview build is isolated in `.next-preview-v2`; ordinary local/Vercel builds retain their normal behavior.
+
+The updated production preview build passed, followed by four official Chrome regression checks in 16.5 seconds. The tests verify the fresh path, correct asset URLs, root redirects, HTML/RSC/CSS cache prevention, and the desktop/mobile demo. After the user opened the new URL, the real workspace log recorded successful Windows Chrome requests for its stylesheet, fonts, and scripts. This establishes delivery to that browser; it is separate from the automated rendering checks performed on Linux.
 
 ## What was exercised
 
@@ -65,7 +71,7 @@ npm run test:e2e
 
 The browser suite starts and stops its own production server on port 3100. Keep that port free, or set `PLAYWRIGHT_PORT` to another port.
 
-After building the preview for `/ports/3100`, run its separate regression:
+After building the preview for `/ports/3100/accessready-v2`, run its separate regression:
 
 ```bash
 npm run test:e2e:preview
@@ -92,7 +98,7 @@ Initial accessibility checks found a few captions just below the contrast thresh
 - Playwright 1.64.1; axe integration 4.14.0.
 - Google Chrome for Testing stable 156.0.8078.80, downloaded from Google's official distribution.
 - Desktop Chromium at 1440 × 1000; Chromium with iPhone 13 viewport/touch emulation at 390 × 844 CSS pixels.
-- Browser automation ran on Linux. No native Windows, Safari, Firefox, physical-device, real assistive-technology, or full manual WCAG audit was performed.
+- Browser automation ran on Linux. No native Windows browser automation, Safari/Firefox tests, physical-device testing, real assistive-technology testing, or full manual WCAG audit was performed.
 - No live provider data, actual accessibility verification, medical advice, real appointment booking, or production verification workflow is included.
 - The app is prepared for Vercel, but no deployment or GitHub repository creation/push has been performed.
 

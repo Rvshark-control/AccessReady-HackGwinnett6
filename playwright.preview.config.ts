@@ -22,13 +22,13 @@ export default defineConfig({
   webServer: [
     {
       command: "node scripts/preview-server.mjs 3199",
-      env: { NEXT_PUBLIC_ACCESSREADY_BASE_PATH: "/ports/3100" },
-      url: "http://127.0.0.1:3199/api/health",
+      env: { NEXT_PUBLIC_ACCESSREADY_BASE_PATH: "/ports/3100/accessready-v2" },
+      url: "http://127.0.0.1:3199/accessready-v2/api/health",
       reuseExistingServer: false,
     },
     {
       command: "node tests/support/port-proxy.mjs 3200 3199 /ports/3100",
-      url: "http://127.0.0.1:3200/ports/3100/api/health",
+      url: "http://127.0.0.1:3200/ports/3100/accessready-v2/api/health",
       reuseExistingServer: false,
     },
   ],

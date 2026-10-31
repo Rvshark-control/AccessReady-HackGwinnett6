@@ -4,9 +4,9 @@ AccessReady is a web application intended to run in Google Chrome on Windows. Th
 
 ## View the running workspace preview
 
-Open **Ports → 3100 → Open in Browser** from the workspace in your Windows Chrome browser. The URL ends in `/ports/3100/`. You do not need Node.js, WSL, Docker, or Linux to view this preview.
+Open **Ports → 3100 → Open in Browser** from the workspace in your Windows Chrome browser. Use **`/ports/3100/accessready-v2`** as the path on that workspace host. You do not need Node.js, WSL, Docker, or Linux to view this preview.
 
-After an update, press **Ctrl+Shift+R** to reload the page and its assets.
+The earlier `/ports/3100/` homepage may still be cached by the hosting proxy. Open the full `/ports/3100/accessready-v2` path directly to reach the corrected build. Preview responses now disable caching.
 
 The preview server accounts for the workspace removing `/ports/3100` before forwarding requests. Both the browser-facing URLs and the internal requests resolve to the same CSS, fonts, JavaScript, pages, and APIs.
 
