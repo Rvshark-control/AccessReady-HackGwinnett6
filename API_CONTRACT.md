@@ -1,101 +1,107 @@
-# AccessReady API contract
+# AccessReady API
 
-All clinic records are fictional. Both successful endpoints include `synthetic: true`.
-Readiness describes selected requirements in demonstration records and never
-guarantees real-world accessibility. Patients should confirm arrangements with
-the facility before an appointment.
+All endpoints are implemented as Next.js App Router route handlers. Responses use JSON. No authentication, secrets, or external database are required. All facility information and verification are synthetic.
+
+## GET /api/health
+
+Returns HTTP 200:
+
+```json
+{
+  "status": "ok",
+  "service": "AccessReady",
+  "version": "2.0.0",
+  "synthetic": true,
+  "facilityCount": 12
+}
+```
 
 ## GET /api/clinics
 
-Returns HTTP 200 with `{ "clinics": [...], "synthetic": true }`.
-Each clinic has `id`, `name`, `description`, and `capabilities`, a map from
-requirement IDs to `CONFIRMED`, `UNAVAILABLE`, or `UNKNOWN`.
-There are three clinics: `clinic-1`, `clinic-2`, and `clinic-3`.
+Optional query parameters can be combined:
+
+| Parameter | Meaning |
+| --- | --- |
+| `q` | Case-insensitive substring in name, specialty, address, or neighborhood; maximum 100 characters |
+| `specialty` | Exact specialty from the dataset |
+| `verification` | `verified`, `self-reported`, or `unverified` |
+| `id` | Exact facility identifier |
+
+Returns HTTP 200 with `{ "clinics": Clinic[], "total": number, "synthetic": true }`.
+
+Every clinic includes a name, specialty, description, address, fictional city, demo phone/email, hours, location coordinates/neighborhood, overall verification, review date, display color, and all 16 accommodations. Each accommodation has `status`, `verification`, and `detail`. See `lib/accessready/types.ts` for the full shared type.
+
+No search results returns HTTP 200 with an empty array. An unknown `id` returns 404. Invalid verification/specialty filters or overly long searches return 400. Errors use `{ "error": "Readable explanation." }`.
+
+Examples:
+
+```bash
+curl http://localhost:3000/api/health
+curl 'http://localhost:3000/api/clinics?q=willow'
+curl 'http://localhost:3000/api/clinics?specialty=Dental%20care&verification=verified'
+```
 
 ## POST /api/match
 
-Send JSON with `Content-Type: application/json`:
+Use `Content-Type: application/json`. The only accepted property is `requirements`: an array of unique, known IDs. No personal or medical information is accepted.
 
 ```json
-{ "requirements": ["accessible_entrance", "transfer_lift"] }
+{
+  "requirements": ["wheelchair_entrance", "adjustable_exam_table"]
+}
 ```
 
 Supported IDs:
 
-- `accessible_entrance`
-- `adjustable_exam_table`
-- `transfer_lift`
-- `trained_assistance`
-- `sign_language_interpreter`
-- `quiet_waiting_area`
-
-Returns HTTP 200 with `{ "results": [...], "synthetic": true }`.
-Each result contains `clinicId`, `clinicName`, `status`, `confirmedCount`,
-`unavailableCount`, `unknownCount`, `checks`, and `verificationQuestions`.
-Each check contains `requirement`, `status`, and a plain-language `explanation`.
-Unavailable and unknown checks each generate a verification question.
-
-For the example request, result order is:
-
-| Clinic | Status | Confirmed | Unavailable | Unknown |
-| --- | --- | --- | --- | --- |
-| clinic-2 | READY | 2 | 0 | 0 |
-| clinic-1 | NEEDS_VERIFICATION | 1 | 0 | 1 |
-| clinic-3 | NOT_READY | 1 | 1 | 0 |
-
-`READY` means all selected requirements are confirmed. `NOT_READY` means at
-least one is unavailable. `NEEDS_VERIFICATION` means none are unavailable but at
-least one is unknown. An empty array returns all clinics as `INCOMPLETE`, with
-zero counts and empty checks/questions. Missing capabilities default to `UNKNOWN`.
-Requirements are deduplicated in first-occurrence order.
-Every selected requirement is mandatory: confirmed features never compensate
-for another selected feature being unavailable or unknown. The contract has no
-separate optional/mandatory field. Only explicit supported capability statuses
-are trusted; corrupt or inherited entries are treated as unknown.
-
-Results sort by READY, NEEDS_VERIFICATION, NOT_READY, INCOMPLETE; ties preserve
-clinic data order. Every successful comparison includes all three clinics.
-
-Malformed JSON, invalid IDs, missing requirements, or a requirements value other
-than an array return HTTP 400 with `{ "error": "clear explanation" }`.
-Unexpected failures return HTTP 500 with a generic `{ "error": "..." }`.
-Handlers do not log submitted data. No authentication, environment variables,
-database, or external API is required.
-Successful responses use `Cache-Control: no-store`.
-
-## Frontend integration
-
-```ts
-const clinicsResponse = await fetch("/api/clinics");
-if (!clinicsResponse.ok) throw new Error("Unable to load clinics");
-const { clinics } = await clinicsResponse.json();
-
-const matchResponse = await fetch("/api/match", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({ requirements: selectedRequirementIds }),
-});
-const body = await matchResponse.json();
-if (!matchResponse.ok) throw new Error(body.error);
-const { results } = body;
+```text
+wheelchair_entrance          accessible_parking
+elevators                   adjustable_exam_table
+accessible_restroom         asl_interpretation
+written_communication       visual_alerts
+screen_reader_forms         large_print
+staff_assistance            quiet_waiting
+reduced_lighting            low_stimulation
+language_interpretation     alternative_communication
 ```
 
-Types are exported from `lib/accessready/types.ts`.
-Route handlers live under `app/api`. If the frontend scaffolds with `src/app`,
-move both handler directories to `src/app/api` and update their relative imports
-to the root `data` and `lib` directories.
+Returns HTTP 200:
 
-## Backend verification
-
-Using the already installed tools, no package configuration changes are needed:
-
-```sh
-node --import tsx tests/backend.test.ts
-node node_modules/typescript/bin/tsc --noEmit --strict --target ES2022 --module ESNext --moduleResolution bundler --lib ES2022,DOM --types node --skipLibCheck app/api/clinics/route.ts app/api/match/route.ts tests/backend.test.ts
+```typescript
+{
+  results: Array<{
+    clinic: Clinic;
+    score: number | null;
+    supported: RequirementCheck[];
+    unsupported: RequirementCheck[];
+    unknown: RequirementCheck[];
+    explanation: string;
+  }>;
+  requirements: RequirementId[];
+  synthetic: true;
+  method: string;
+}
 ```
 
-These type-check the backend and tests independently of frontend scaffolding.
-Tests exercise route handlers directly with standard Request/Response objects.
-They include all 64 subsets of the six requirement IDs, checking ranking,
-mandatory-feature precedence, counts, verification questions, and invariance
-under requirement reordering.
+Each requirement check includes the ID, readable label, effective support status, evidence level, and explanation. Results are actually calculated on the server from the submitted requirements and bundled facility dataset.
+
+**Scoring:** verified supported count divided by selected count, multiplied by 100 and rounded down. Verified absence is missing. Self-reported/unverified assertions, absent records, and unknown support remain unknown. No selected requirements yields `null`, not 100%. Ties favor fewer confirmed missing requirements, then alphabetical name order.
+
+The API accepts an empty array for unscored browsing. It rejects duplicate/unknown IDs, non-array values, extra fields, malformed JSON, and more than 16 IDs. The body is limited to 4 KB while streaming; missing or misleading content-length headers cannot bypass the limit.
+
+| Status | Meaning |
+| --- | --- |
+| 200 | Successful matching |
+| 400 | Malformed JSON or invalid request |
+| 413 | Request body exceeds 4 KB |
+| 415 | Unsupported content type |
+| 500 | Unexpected processing error |
+
+Match and health responses use `Cache-Control: no-store`.
+
+```bash
+curl -X POST http://localhost:3000/api/match \
+  -H 'Content-Type: application/json' \
+  -d '{"requirements":["wheelchair_entrance","adjustable_exam_table"]}'
+```
+
+`score: 100` describes support for the selected needs only within the synthetic scenario. It is not medical advice, real verification, or a guarantee of care.

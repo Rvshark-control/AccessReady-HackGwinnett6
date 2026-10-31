@@ -1,0 +1,1214 @@
+[
+  {
+    "id": "willow-family-care",
+    "name": "Willow Family Care",
+    "specialty": "Primary care",
+    "description": "A welcoming neighborhood practice with flexible examination rooms and a dedicated patient support team.",
+    "address": "120 Garden Lane",
+    "city": "Maple Harbor, NY 00000 (fictional)",
+    "phone": "(212) 555-0101",
+    "email": "hello@willow-family-care.example",
+    "hours": "Monday\u2013Friday, 8:30 AM\u20135:00 PM (demo)",
+    "location": {
+      "latitude": 40.74,
+      "longitude": -73.96,
+      "neighborhood": "Garden District"
+    },
+    "verification": "verified",
+    "reviewedAt": "2026-10-28",
+    "accommodations": {
+      "wheelchair_entrance": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "Step-free entrance with automatic doors and a 36-inch clear opening."
+      },
+      "accessible_parking": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "Two designated spaces with adjacent access aisles by the main entrance."
+      },
+      "elevators": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "An accessible elevator serves all patient floors."
+      },
+      "adjustable_exam_table": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "A height-adjustable examination table lowers to 18 inches. Request it when booking."
+      },
+      "accessible_restroom": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "An accessible restroom has grab bars and wheelchair turning space."
+      },
+      "asl_interpretation": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "Video ASL interpretation can be reserved with two business days of notice."
+      },
+      "written_communication": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "Staff can use a tablet or written notes throughout the visit."
+      },
+      "visual_alerts": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "A visual appointment display and flashing emergency alerts are available."
+      },
+      "screen_reader_forms": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "Digital intake forms have labeled controls and have been tested with screen readers in this fictional scenario."
+      },
+      "large_print": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "18-point large-print intake and care materials are available on request."
+      },
+      "staff_assistance": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "Staff can assist with wayfinding and read forms aloud on request."
+      },
+      "quiet_waiting": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "A separate quiet waiting room can be requested when booking."
+      },
+      "reduced_lighting": {
+        "status": "unknown",
+        "verification": "unverified",
+        "detail": "No reviewed information is available for this accommodation. Confirmation is needed."
+      },
+      "low_stimulation": {
+        "status": "supported",
+        "verification": "self-reported",
+        "detail": "A care room without background music or screens can be reserved."
+      },
+      "language_interpretation": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "Remote spoken-language interpretation is offered; request your language in advance."
+      },
+      "alternative_communication": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "Staff allow extra time and support patient-provided AAC devices and communication boards."
+      }
+    },
+    "color": "teal"
+  },
+  {
+    "id": "cedar-grove-health",
+    "name": "Cedar Grove Health",
+    "specialty": "Primary care",
+    "description": "Whole-person primary care with spacious examination rooms and thoughtful mobility accommodations.",
+    "address": "137 Cedar Lane",
+    "city": "Maple Harbor, NY 00000 (fictional)",
+    "phone": "(212) 555-0102",
+    "email": "hello@cedar-grove-health.example",
+    "hours": "Monday\u2013Friday, 8:30 AM\u20135:00 PM (demo)",
+    "location": {
+      "latitude": 40.742,
+      "longitude": -73.959,
+      "neighborhood": "Cedar Quarter"
+    },
+    "verification": "verified",
+    "reviewedAt": "2026-10-28",
+    "accommodations": {
+      "wheelchair_entrance": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "Step-free entrance with automatic doors and a 36-inch clear opening."
+      },
+      "accessible_parking": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "Two designated spaces with adjacent access aisles by the main entrance."
+      },
+      "elevators": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "An accessible elevator serves all patient floors."
+      },
+      "adjustable_exam_table": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "A height-adjustable examination table lowers to 18 inches. Request it when booking."
+      },
+      "accessible_restroom": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "An accessible restroom has grab bars and wheelchair turning space."
+      },
+      "asl_interpretation": {
+        "status": "unsupported",
+        "verification": "verified",
+        "detail": "ASL interpretation is not currently offered."
+      },
+      "written_communication": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "Staff can use a tablet or written notes throughout the visit."
+      },
+      "visual_alerts": {
+        "status": "supported",
+        "verification": "self-reported",
+        "detail": "A visual appointment display and flashing emergency alerts are available."
+      },
+      "screen_reader_forms": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "Digital intake forms have labeled controls and have been tested with screen readers in this fictional scenario."
+      },
+      "large_print": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "18-point large-print intake and care materials are available on request."
+      },
+      "staff_assistance": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "Staff can assist with wayfinding and read forms aloud on request."
+      },
+      "quiet_waiting": {
+        "status": "unsupported",
+        "verification": "verified",
+        "detail": "There is one shared waiting room; a separate quiet space is not available."
+      },
+      "reduced_lighting": {
+        "status": "unsupported",
+        "verification": "verified",
+        "detail": "Examination room lighting cannot be dimmed."
+      },
+      "low_stimulation": {
+        "status": "unsupported",
+        "verification": "verified",
+        "detail": "Low-stimulation care spaces are not available."
+      },
+      "language_interpretation": {
+        "status": "supported",
+        "verification": "self-reported",
+        "detail": "Remote spoken-language interpretation is offered; request your language in advance."
+      },
+      "alternative_communication": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "Staff allow extra time and support patient-provided AAC devices and communication boards."
+      }
+    },
+    "color": "blue"
+  },
+  {
+    "id": "harborview-wellness",
+    "name": "Harborview Wellness",
+    "specialty": "Mental health",
+    "description": "A small counseling practice designed around calm spaces, flexible communication, and unhurried visits.",
+    "address": "154 Waterfront Lane",
+    "city": "Maple Harbor, NY 00000 (fictional)",
+    "phone": "(212) 555-0103",
+    "email": "hello@harborview-wellness.example",
+    "hours": "Monday\u2013Friday, 8:30 AM\u20135:00 PM (demo)",
+    "location": {
+      "latitude": 40.744,
+      "longitude": -73.958,
+      "neighborhood": "Waterfront"
+    },
+    "verification": "verified",
+    "reviewedAt": "2026-10-28",
+    "accommodations": {
+      "wheelchair_entrance": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "Step-free entrance with automatic doors and a 36-inch clear opening."
+      },
+      "accessible_parking": {
+        "status": "unsupported",
+        "verification": "verified",
+        "detail": "No designated accessible parking is available on site."
+      },
+      "elevators": {
+        "status": "unsupported",
+        "verification": "verified",
+        "detail": "There is no elevator; confirm whether your visit can be on the ground floor."
+      },
+      "adjustable_exam_table": {
+        "status": "unsupported",
+        "verification": "verified",
+        "detail": "Examination tables have a fixed height; no adjustable table is available."
+      },
+      "accessible_restroom": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "An accessible restroom has grab bars and wheelchair turning space."
+      },
+      "asl_interpretation": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "Video ASL interpretation can be reserved with two business days of notice."
+      },
+      "written_communication": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "Staff can use a tablet or written notes throughout the visit."
+      },
+      "visual_alerts": {
+        "status": "unknown",
+        "verification": "unverified",
+        "detail": "No reviewed information is available for this accommodation. Confirmation is needed."
+      },
+      "screen_reader_forms": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "Digital intake forms have labeled controls and have been tested with screen readers in this fictional scenario."
+      },
+      "large_print": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "18-point large-print intake and care materials are available on request."
+      },
+      "staff_assistance": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "Staff can assist with wayfinding and read forms aloud on request."
+      },
+      "quiet_waiting": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "A separate quiet waiting room can be requested when booking."
+      },
+      "reduced_lighting": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "Dimmable lighting is available in designated examination rooms."
+      },
+      "low_stimulation": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "A care room without background music or screens can be reserved."
+      },
+      "language_interpretation": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "Remote spoken-language interpretation is offered; request your language in advance."
+      },
+      "alternative_communication": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "Staff allow extra time and support patient-provided AAC devices and communication boards."
+      }
+    },
+    "color": "purple"
+  },
+  {
+    "id": "northstar-rehabilitation",
+    "name": "Northstar Rehabilitation",
+    "specialty": "Physical therapy",
+    "description": "A rehabilitation studio with accessible equipment, wide treatment bays, and movement support.",
+    "address": "171 North Lane",
+    "city": "Maple Harbor, NY 00000 (fictional)",
+    "phone": "(212) 555-0104",
+    "email": "hello@northstar-rehabilitation.example",
+    "hours": "Monday\u2013Friday, 8:30 AM\u20135:00 PM (demo)",
+    "location": {
+      "latitude": 40.746,
+      "longitude": -73.957,
+      "neighborhood": "North Commons"
+    },
+    "verification": "verified",
+    "reviewedAt": "2026-10-28",
+    "accommodations": {
+      "wheelchair_entrance": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "Step-free entrance with automatic doors and a 36-inch clear opening."
+      },
+      "accessible_parking": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "Two designated spaces with adjacent access aisles by the main entrance."
+      },
+      "elevators": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "An accessible elevator serves all patient floors."
+      },
+      "adjustable_exam_table": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "A height-adjustable examination table lowers to 18 inches. Request it when booking."
+      },
+      "accessible_restroom": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "An accessible restroom has grab bars and wheelchair turning space."
+      },
+      "asl_interpretation": {
+        "status": "unknown",
+        "verification": "unverified",
+        "detail": "No reviewed information is available for this accommodation. Confirmation is needed."
+      },
+      "written_communication": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "Staff can use a tablet or written notes throughout the visit."
+      },
+      "visual_alerts": {
+        "status": "unsupported",
+        "verification": "verified",
+        "detail": "The waiting area uses audio-only appointment announcements."
+      },
+      "screen_reader_forms": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "Digital intake forms have labeled controls and have been tested with screen readers in this fictional scenario."
+      },
+      "large_print": {
+        "status": "supported",
+        "verification": "self-reported",
+        "detail": "18-point large-print intake and care materials are available on request."
+      },
+      "staff_assistance": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "Staff can assist with wayfinding and read forms aloud on request."
+      },
+      "quiet_waiting": {
+        "status": "unsupported",
+        "verification": "verified",
+        "detail": "There is one shared waiting room; a separate quiet space is not available."
+      },
+      "reduced_lighting": {
+        "status": "unsupported",
+        "verification": "verified",
+        "detail": "Examination room lighting cannot be dimmed."
+      },
+      "low_stimulation": {
+        "status": "unsupported",
+        "verification": "verified",
+        "detail": "Low-stimulation care spaces are not available."
+      },
+      "language_interpretation": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "Remote spoken-language interpretation is offered; request your language in advance."
+      },
+      "alternative_communication": {
+        "status": "supported",
+        "verification": "self-reported",
+        "detail": "Staff allow extra time and support patient-provided AAC devices and communication boards."
+      }
+    },
+    "color": "peach"
+  },
+  {
+    "id": "fern-and-field-clinic",
+    "name": "Fern & Field Clinic",
+    "specialty": "Primary care",
+    "description": "A community-focused practice with a mix of documented and self-reported accommodation information.",
+    "address": "188 Garden Lane",
+    "city": "Maple Harbor, NY 00000 (fictional)",
+    "phone": "(212) 555-0105",
+    "email": "hello@fern-and-field-clinic.example",
+    "hours": "Monday\u2013Friday, 8:30 AM\u20135:00 PM (demo)",
+    "location": {
+      "latitude": 40.748,
+      "longitude": -73.956,
+      "neighborhood": "Garden District"
+    },
+    "verification": "self-reported",
+    "reviewedAt": "2026-10-28",
+    "accommodations": {
+      "wheelchair_entrance": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "Step-free entrance with automatic doors and a 36-inch clear opening."
+      },
+      "accessible_parking": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "Two designated spaces with adjacent access aisles by the main entrance."
+      },
+      "elevators": {
+        "status": "supported",
+        "verification": "self-reported",
+        "detail": "An accessible elevator serves all patient floors."
+      },
+      "adjustable_exam_table": {
+        "status": "supported",
+        "verification": "self-reported",
+        "detail": "A height-adjustable examination table lowers to 18 inches. Request it when booking."
+      },
+      "accessible_restroom": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "An accessible restroom has grab bars and wheelchair turning space."
+      },
+      "asl_interpretation": {
+        "status": "unknown",
+        "verification": "unverified",
+        "detail": "No reviewed information is available for this accommodation. Confirmation is needed."
+      },
+      "written_communication": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "Staff can use a tablet or written notes throughout the visit."
+      },
+      "visual_alerts": {
+        "status": "supported",
+        "verification": "self-reported",
+        "detail": "A visual appointment display and flashing emergency alerts are available."
+      },
+      "screen_reader_forms": {
+        "status": "supported",
+        "verification": "self-reported",
+        "detail": "Digital intake forms have labeled controls and have been tested with screen readers in this fictional scenario."
+      },
+      "large_print": {
+        "status": "supported",
+        "verification": "self-reported",
+        "detail": "18-point large-print intake and care materials are available on request."
+      },
+      "staff_assistance": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "Staff can assist with wayfinding and read forms aloud on request."
+      },
+      "quiet_waiting": {
+        "status": "unknown",
+        "verification": "unverified",
+        "detail": "No reviewed information is available for this accommodation. Confirmation is needed."
+      },
+      "reduced_lighting": {
+        "status": "supported",
+        "verification": "self-reported",
+        "detail": "Dimmable lighting is available in designated examination rooms."
+      },
+      "low_stimulation": {
+        "status": "supported",
+        "verification": "self-reported",
+        "detail": "A care room without background music or screens can be reserved."
+      },
+      "language_interpretation": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "Remote spoken-language interpretation is offered; request your language in advance."
+      },
+      "alternative_communication": {
+        "status": "supported",
+        "verification": "self-reported",
+        "detail": "Staff allow extra time and support patient-provided AAC devices and communication boards."
+      }
+    },
+    "color": "teal"
+  },
+  {
+    "id": "juniper-dental-studio",
+    "name": "Juniper Dental Studio",
+    "specialty": "Dental care",
+    "description": "A dental practice offering written communication, extra appointment time, and adjustable lighting.",
+    "address": "205 Cedar Lane",
+    "city": "Maple Harbor, NY 00000 (fictional)",
+    "phone": "(212) 555-0106",
+    "email": "hello@juniper-dental-studio.example",
+    "hours": "Monday\u2013Friday, 8:30 AM\u20135:00 PM (demo)",
+    "location": {
+      "latitude": 40.75,
+      "longitude": -73.955,
+      "neighborhood": "Cedar Quarter"
+    },
+    "verification": "verified",
+    "reviewedAt": "2026-10-28",
+    "accommodations": {
+      "wheelchair_entrance": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "Step-free entrance with automatic doors and a 36-inch clear opening."
+      },
+      "accessible_parking": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "Two designated spaces with adjacent access aisles by the main entrance."
+      },
+      "elevators": {
+        "status": "unsupported",
+        "verification": "verified",
+        "detail": "There is no elevator; confirm whether your visit can be on the ground floor."
+      },
+      "adjustable_exam_table": {
+        "status": "unsupported",
+        "verification": "verified",
+        "detail": "Examination tables have a fixed height; no adjustable table is available."
+      },
+      "accessible_restroom": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "An accessible restroom has grab bars and wheelchair turning space."
+      },
+      "asl_interpretation": {
+        "status": "unsupported",
+        "verification": "verified",
+        "detail": "ASL interpretation is not currently offered."
+      },
+      "written_communication": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "Staff can use a tablet or written notes throughout the visit."
+      },
+      "visual_alerts": {
+        "status": "unsupported",
+        "verification": "verified",
+        "detail": "The waiting area uses audio-only appointment announcements."
+      },
+      "screen_reader_forms": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "Digital intake forms have labeled controls and have been tested with screen readers in this fictional scenario."
+      },
+      "large_print": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "18-point large-print intake and care materials are available on request."
+      },
+      "staff_assistance": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "Staff can assist with wayfinding and read forms aloud on request."
+      },
+      "quiet_waiting": {
+        "status": "unknown",
+        "verification": "unverified",
+        "detail": "No reviewed information is available for this accommodation. Confirmation is needed."
+      },
+      "reduced_lighting": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "Dimmable lighting is available in designated examination rooms."
+      },
+      "low_stimulation": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "A care room without background music or screens can be reserved."
+      },
+      "language_interpretation": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "Remote spoken-language interpretation is offered; request your language in advance."
+      },
+      "alternative_communication": {
+        "status": "unsupported",
+        "verification": "verified",
+        "detail": "There is no established AAC or communication-board support process."
+      }
+    },
+    "color": "blue"
+  },
+  {
+    "id": "maple-hearing-center",
+    "name": "Maple Hearing Center",
+    "specialty": "Hearing & audiology",
+    "description": "An audiology practice with visual appointment cues, ASL interpretation, and multiple communication options.",
+    "address": "222 Midtown Lane",
+    "city": "Maple Harbor, NY 00000 (fictional)",
+    "phone": "(212) 555-0107",
+    "email": "hello@maple-hearing-center.example",
+    "hours": "Monday\u2013Friday, 8:30 AM\u20135:00 PM (demo)",
+    "location": {
+      "latitude": 40.752,
+      "longitude": -73.954,
+      "neighborhood": "Midtown"
+    },
+    "verification": "verified",
+    "reviewedAt": "2026-10-28",
+    "accommodations": {
+      "wheelchair_entrance": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "Step-free entrance with automatic doors and a 36-inch clear opening."
+      },
+      "accessible_parking": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "Two designated spaces with adjacent access aisles by the main entrance."
+      },
+      "elevators": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "An accessible elevator serves all patient floors."
+      },
+      "adjustable_exam_table": {
+        "status": "unknown",
+        "verification": "unverified",
+        "detail": "No reviewed information is available for this accommodation. Confirmation is needed."
+      },
+      "accessible_restroom": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "An accessible restroom has grab bars and wheelchair turning space."
+      },
+      "asl_interpretation": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "Video ASL interpretation can be reserved with two business days of notice."
+      },
+      "written_communication": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "Staff can use a tablet or written notes throughout the visit."
+      },
+      "visual_alerts": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "A visual appointment display and flashing emergency alerts are available."
+      },
+      "screen_reader_forms": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "Digital intake forms have labeled controls and have been tested with screen readers in this fictional scenario."
+      },
+      "large_print": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "18-point large-print intake and care materials are available on request."
+      },
+      "staff_assistance": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "Staff can assist with wayfinding and read forms aloud on request."
+      },
+      "quiet_waiting": {
+        "status": "unsupported",
+        "verification": "verified",
+        "detail": "There is one shared waiting room; a separate quiet space is not available."
+      },
+      "reduced_lighting": {
+        "status": "unsupported",
+        "verification": "verified",
+        "detail": "Examination room lighting cannot be dimmed."
+      },
+      "low_stimulation": {
+        "status": "unsupported",
+        "verification": "verified",
+        "detail": "Low-stimulation care spaces are not available."
+      },
+      "language_interpretation": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "Remote spoken-language interpretation is offered; request your language in advance."
+      },
+      "alternative_communication": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "Staff allow extra time and support patient-provided AAC devices and communication boards."
+      }
+    },
+    "color": "purple"
+  },
+  {
+    "id": "lumen-eye-care",
+    "name": "Lumen Eye Care",
+    "specialty": "Vision care",
+    "description": "A vision-care studio sharing information about large-print materials and staff-assisted navigation.",
+    "address": "239 Midtown Lane",
+    "city": "Maple Harbor, NY 00000 (fictional)",
+    "phone": "(212) 555-0108",
+    "email": "hello@lumen-eye-care.example",
+    "hours": "Monday\u2013Friday, 8:30 AM\u20135:00 PM (demo)",
+    "location": {
+      "latitude": 40.754,
+      "longitude": -73.953,
+      "neighborhood": "Midtown"
+    },
+    "verification": "self-reported",
+    "reviewedAt": "2026-10-28",
+    "accommodations": {
+      "wheelchair_entrance": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "Step-free entrance with automatic doors and a 36-inch clear opening."
+      },
+      "accessible_parking": {
+        "status": "supported",
+        "verification": "self-reported",
+        "detail": "Two designated spaces with adjacent access aisles by the main entrance."
+      },
+      "elevators": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "An accessible elevator serves all patient floors."
+      },
+      "adjustable_exam_table": {
+        "status": "unknown",
+        "verification": "unverified",
+        "detail": "No reviewed information is available for this accommodation. Confirmation is needed."
+      },
+      "accessible_restroom": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "An accessible restroom has grab bars and wheelchair turning space."
+      },
+      "asl_interpretation": {
+        "status": "unknown",
+        "verification": "unverified",
+        "detail": "No reviewed information is available for this accommodation. Confirmation is needed."
+      },
+      "written_communication": {
+        "status": "supported",
+        "verification": "self-reported",
+        "detail": "Staff can use a tablet or written notes throughout the visit."
+      },
+      "visual_alerts": {
+        "status": "unknown",
+        "verification": "unverified",
+        "detail": "No reviewed information is available for this accommodation. Confirmation is needed."
+      },
+      "screen_reader_forms": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "Digital intake forms have labeled controls and have been tested with screen readers in this fictional scenario."
+      },
+      "large_print": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "18-point large-print intake and care materials are available on request."
+      },
+      "staff_assistance": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "Staff can assist with wayfinding and read forms aloud on request."
+      },
+      "quiet_waiting": {
+        "status": "supported",
+        "verification": "self-reported",
+        "detail": "A separate quiet waiting room can be requested when booking."
+      },
+      "reduced_lighting": {
+        "status": "unknown",
+        "verification": "unverified",
+        "detail": "No reviewed information is available for this accommodation. Confirmation is needed."
+      },
+      "low_stimulation": {
+        "status": "supported",
+        "verification": "self-reported",
+        "detail": "A care room without background music or screens can be reserved."
+      },
+      "language_interpretation": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "Remote spoken-language interpretation is offered; request your language in advance."
+      },
+      "alternative_communication": {
+        "status": "unknown",
+        "verification": "unverified",
+        "detail": "No reviewed information is available for this accommodation. Confirmation is needed."
+      }
+    },
+    "color": "peach"
+  },
+  {
+    "id": "meadow-pediatric-care",
+    "name": "Meadow Pediatric Care",
+    "specialty": "Pediatrics",
+    "description": "Family-focused care with quiet spaces and low-stimulation appointment options for children.",
+    "address": "256 North Lane",
+    "city": "Maple Harbor, NY 00000 (fictional)",
+    "phone": "(212) 555-0109",
+    "email": "hello@meadow-pediatric-care.example",
+    "hours": "Monday\u2013Friday, 8:30 AM\u20135:00 PM (demo)",
+    "location": {
+      "latitude": 40.756,
+      "longitude": -73.952,
+      "neighborhood": "North Commons"
+    },
+    "verification": "verified",
+    "reviewedAt": "2026-10-28",
+    "accommodations": {
+      "wheelchair_entrance": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "Step-free entrance with automatic doors and a 36-inch clear opening."
+      },
+      "accessible_parking": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "Two designated spaces with adjacent access aisles by the main entrance."
+      },
+      "elevators": {
+        "status": "unsupported",
+        "verification": "verified",
+        "detail": "There is no elevator; confirm whether your visit can be on the ground floor."
+      },
+      "adjustable_exam_table": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "A height-adjustable examination table lowers to 18 inches. Request it when booking."
+      },
+      "accessible_restroom": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "An accessible restroom has grab bars and wheelchair turning space."
+      },
+      "asl_interpretation": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "Video ASL interpretation can be reserved with two business days of notice."
+      },
+      "written_communication": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "Staff can use a tablet or written notes throughout the visit."
+      },
+      "visual_alerts": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "A visual appointment display and flashing emergency alerts are available."
+      },
+      "screen_reader_forms": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "Digital intake forms have labeled controls and have been tested with screen readers in this fictional scenario."
+      },
+      "large_print": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "18-point large-print intake and care materials are available on request."
+      },
+      "staff_assistance": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "Staff can assist with wayfinding and read forms aloud on request."
+      },
+      "quiet_waiting": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "A separate quiet waiting room can be requested when booking."
+      },
+      "reduced_lighting": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "Dimmable lighting is available in designated examination rooms."
+      },
+      "low_stimulation": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "A care room without background music or screens can be reserved."
+      },
+      "language_interpretation": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "Remote spoken-language interpretation is offered; request your language in advance."
+      },
+      "alternative_communication": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "Staff allow extra time and support patient-provided AAC devices and communication boards."
+      }
+    },
+    "color": "teal"
+  },
+  {
+    "id": "tidewell-specialty-care",
+    "name": "Tidewell Specialty Care",
+    "specialty": "Specialist care",
+    "description": "A multispecialty practice with some documented mobility features and accommodation details still awaiting review.",
+    "address": "273 Waterfront Lane",
+    "city": "Maple Harbor, NY 00000 (fictional)",
+    "phone": "(212) 555-0110",
+    "email": "hello@tidewell-specialty-care.example",
+    "hours": "Monday\u2013Friday, 8:30 AM\u20135:00 PM (demo)",
+    "location": {
+      "latitude": 40.758,
+      "longitude": -73.951,
+      "neighborhood": "Waterfront"
+    },
+    "verification": "self-reported",
+    "reviewedAt": "2026-10-28",
+    "accommodations": {
+      "wheelchair_entrance": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "Step-free entrance with automatic doors and a 36-inch clear opening."
+      },
+      "accessible_parking": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "Two designated spaces with adjacent access aisles by the main entrance."
+      },
+      "elevators": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "An accessible elevator serves all patient floors."
+      },
+      "adjustable_exam_table": {
+        "status": "unknown",
+        "verification": "unverified",
+        "detail": "No reviewed information is available for this accommodation. Confirmation is needed."
+      },
+      "accessible_restroom": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "An accessible restroom has grab bars and wheelchair turning space."
+      },
+      "asl_interpretation": {
+        "status": "unknown",
+        "verification": "unverified",
+        "detail": "No reviewed information is available for this accommodation. Confirmation is needed."
+      },
+      "written_communication": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "Staff can use a tablet or written notes throughout the visit."
+      },
+      "visual_alerts": {
+        "status": "supported",
+        "verification": "self-reported",
+        "detail": "A visual appointment display and flashing emergency alerts are available."
+      },
+      "screen_reader_forms": {
+        "status": "supported",
+        "verification": "self-reported",
+        "detail": "Digital intake forms have labeled controls and have been tested with screen readers in this fictional scenario."
+      },
+      "large_print": {
+        "status": "unknown",
+        "verification": "unverified",
+        "detail": "No reviewed information is available for this accommodation. Confirmation is needed."
+      },
+      "staff_assistance": {
+        "status": "supported",
+        "verification": "verified",
+        "detail": "Staff can assist with wayfinding and read forms aloud on request."
+      },
+      "quiet_waiting": {
+        "status": "unknown",
+        "verification": "unverified",
+        "detail": "No reviewed information is available for this accommodation. Confirmation is needed."
+      },
+      "reduced_lighting": {
+        "status": "supported",
+        "verification": "self-reported",
+        "detail": "Dimmable lighting is available in designated examination rooms."
+      },
+      "low_stimulation": {
+        "status": "unknown",
+        "verification": "unverified",
+        "detail": "No reviewed information is available for this accommodation. Confirmation is needed."
+      },
+      "language_interpretation": {
+        "status": "supported",
+        "verification": "self-reported",
+        "detail": "Remote spoken-language interpretation is offered; request your language in advance."
+      },
+      "alternative_communication": {
+        "status": "unknown",
+        "verification": "unverified",
+        "detail": "No reviewed information is available for this accommodation. Confirmation is needed."
+      }
+    },
+    "color": "blue"
+  },
+  {
+    "id": "clover-community-health",
+    "name": "Clover Community Health",
+    "specialty": "Primary care",
+    "description": "A fictional community clinic whose submitted accommodation information has not yet been reviewed.",
+    "address": "290 Old Lane",
+    "city": "Maple Harbor, NY 00000 (fictional)",
+    "phone": "(212) 555-0111",
+    "email": "hello@clover-community-health.example",
+    "hours": "Monday\u2013Friday, 8:30 AM\u20135:00 PM (demo)",
+    "location": {
+      "latitude": 40.76,
+      "longitude": -73.95,
+      "neighborhood": "Old Town"
+    },
+    "verification": "unverified",
+    "reviewedAt": "2026-10-28",
+    "accommodations": {
+      "wheelchair_entrance": {
+        "status": "supported",
+        "verification": "self-reported",
+        "detail": "Step-free entrance with automatic doors and a 36-inch clear opening."
+      },
+      "accessible_parking": {
+        "status": "supported",
+        "verification": "self-reported",
+        "detail": "Two designated spaces with adjacent access aisles by the main entrance."
+      },
+      "elevators": {
+        "status": "unknown",
+        "verification": "unverified",
+        "detail": "No reviewed information is available for this accommodation. Confirmation is needed."
+      },
+      "adjustable_exam_table": {
+        "status": "supported",
+        "verification": "self-reported",
+        "detail": "A height-adjustable examination table lowers to 18 inches. Request it when booking."
+      },
+      "accessible_restroom": {
+        "status": "supported",
+        "verification": "self-reported",
+        "detail": "An accessible restroom has grab bars and wheelchair turning space."
+      },
+      "asl_interpretation": {
+        "status": "unknown",
+        "verification": "unverified",
+        "detail": "No reviewed information is available for this accommodation. Confirmation is needed."
+      },
+      "written_communication": {
+        "status": "supported",
+        "verification": "self-reported",
+        "detail": "Staff can use a tablet or written notes throughout the visit."
+      },
+      "visual_alerts": {
+        "status": "unknown",
+        "verification": "unverified",
+        "detail": "No reviewed information is available for this accommodation. Confirmation is needed."
+      },
+      "screen_reader_forms": {
+        "status": "supported",
+        "verification": "self-reported",
+        "detail": "Digital intake forms have labeled controls and have been tested with screen readers in this fictional scenario."
+      },
+      "large_print": {
+        "status": "supported",
+        "verification": "self-reported",
+        "detail": "18-point large-print intake and care materials are available on request."
+      },
+      "staff_assistance": {
+        "status": "supported",
+        "verification": "self-reported",
+        "detail": "Staff can assist with wayfinding and read forms aloud on request."
+      },
+      "quiet_waiting": {
+        "status": "unknown",
+        "verification": "unverified",
+        "detail": "No reviewed information is available for this accommodation. Confirmation is needed."
+      },
+      "reduced_lighting": {
+        "status": "unknown",
+        "verification": "unverified",
+        "detail": "No reviewed information is available for this accommodation. Confirmation is needed."
+      },
+      "low_stimulation": {
+        "status": "unknown",
+        "verification": "unverified",
+        "detail": "No reviewed information is available for this accommodation. Confirmation is needed."
+      },
+      "language_interpretation": {
+        "status": "supported",
+        "verification": "self-reported",
+        "detail": "Remote spoken-language interpretation is offered; request your language in advance."
+      },
+      "alternative_communication": {
+        "status": "supported",
+        "verification": "self-reported",
+        "detail": "Staff allow extra time and support patient-provided AAC devices and communication boards."
+      }
+    },
+    "color": "purple"
+  },
+  {
+    "id": "amber-brook-dental",
+    "name": "Amber Brook Dental",
+    "specialty": "Dental care",
+    "description": "A demonstration dental office with limited accessibility information, illustrating why unknown details matter.",
+    "address": "307 Old Lane",
+    "city": "Maple Harbor, NY 00000 (fictional)",
+    "phone": "(212) 555-0112",
+    "email": "hello@amber-brook-dental.example",
+    "hours": "Monday\u2013Friday, 8:30 AM\u20135:00 PM (demo)",
+    "location": {
+      "latitude": 40.762,
+      "longitude": -73.949,
+      "neighborhood": "Old Town"
+    },
+    "verification": "unverified",
+    "reviewedAt": "2026-10-28",
+    "accommodations": {
+      "wheelchair_entrance": {
+        "status": "unknown",
+        "verification": "unverified",
+        "detail": "No reviewed information is available for this accommodation. Confirmation is needed."
+      },
+      "accessible_parking": {
+        "status": "supported",
+        "verification": "self-reported",
+        "detail": "Two designated spaces with adjacent access aisles by the main entrance."
+      },
+      "elevators": {
+        "status": "unknown",
+        "verification": "unverified",
+        "detail": "No reviewed information is available for this accommodation. Confirmation is needed."
+      },
+      "adjustable_exam_table": {
+        "status": "unsupported",
+        "verification": "verified",
+        "detail": "Examination tables have a fixed height; no adjustable table is available."
+      },
+      "accessible_restroom": {
+        "status": "unknown",
+        "verification": "unverified",
+        "detail": "No reviewed information is available for this accommodation. Confirmation is needed."
+      },
+      "asl_interpretation": {
+        "status": "unknown",
+        "verification": "unverified",
+        "detail": "No reviewed information is available for this accommodation. Confirmation is needed."
+      },
+      "written_communication": {
+        "status": "supported",
+        "verification": "self-reported",
+        "detail": "Staff can use a tablet or written notes throughout the visit."
+      },
+      "visual_alerts": {
+        "status": "unknown",
+        "verification": "unverified",
+        "detail": "No reviewed information is available for this accommodation. Confirmation is needed."
+      },
+      "screen_reader_forms": {
+        "status": "unknown",
+        "verification": "unverified",
+        "detail": "No reviewed information is available for this accommodation. Confirmation is needed."
+      },
+      "large_print": {
+        "status": "unknown",
+        "verification": "unverified",
+        "detail": "No reviewed information is available for this accommodation. Confirmation is needed."
+      },
+      "staff_assistance": {
+        "status": "unknown",
+        "verification": "unverified",
+        "detail": "No reviewed information is available for this accommodation. Confirmation is needed."
+      },
+      "quiet_waiting": {
+        "status": "unknown",
+        "verification": "unverified",
+        "detail": "No reviewed information is available for this accommodation. Confirmation is needed."
+      },
+      "reduced_lighting": {
+        "status": "supported",
+        "verification": "self-reported",
+        "detail": "Dimmable lighting is available in designated examination rooms."
+      },
+      "low_stimulation": {
+        "status": "unknown",
+        "verification": "unverified",
+        "detail": "No reviewed information is available for this accommodation. Confirmation is needed."
+      },
+      "language_interpretation": {
+        "status": "unknown",
+        "verification": "unverified",
+        "detail": "No reviewed information is available for this accommodation. Confirmation is needed."
+      },
+      "alternative_communication": {
+        "status": "unknown",
+        "verification": "unverified",
+        "detail": "No reviewed information is available for this accommodation. Confirmation is needed."
+      }
+    },
+    "color": "peach"
+  }
+]

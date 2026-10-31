@@ -1,227 +1,146 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { GET } from "../app/api/clinics/route";
-import { POST } from "../app/api/match/route";
 import { clinics } from "../data/clinics";
-import { matchClinic, matchClinics } from "../lib/accessready/match";
-import { validateRequirements } from "../lib/accessready/validation";
-import type { Clinic, MatchResponse } from "../lib/accessready/types";
-import { REQUIREMENT_IDS } from "../lib/accessready/types";
+import { effectiveStatus, matchClinic, matchClinics } from "../lib/accessready/match";
+import { REQUIREMENT_IDS, type Clinic } from "../lib/accessready/types";
+import { DEMO_REQUIREMENTS } from "../lib/accessready/requirements";
+import { ValidationError, validateRequirements } from "../lib/accessready/validation";
+import { GET as getClinics } from "../app/api/clinics/route";
+import { POST as postMatch } from "../app/api/match/route";
+import { GET as health } from "../app/api/health/route";
 
-function request(body: unknown): Request {
-  return new Request("http://localhost/api/match", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-  });
-}
+const request = (body: unknown) => new Request("http://localhost/api/match", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
 
-test("all confirmed requirements produce READY", () => {
-  const result = matchClinic(clinics[1], ["accessible_entrance", "transfer_lift"]);
-  assert.equal(result.status, "READY");
-  assert.equal(result.confirmedCount, 2);
-  assert.deepEqual(result.verificationQuestions, []);
-});
-
-test("one unavailable produces NOT_READY and a verification question", () => {
-  const result = matchClinic(clinics[2], ["transfer_lift"]);
-  assert.equal(result.status, "NOT_READY");
-  assert.equal(result.unavailableCount, 1);
-  assert.equal(result.verificationQuestions.length, 1);
-});
-
-test("one unknown produces NEEDS_VERIFICATION and never counts as confirmed", () => {
-  const result = matchClinic(clinics[0], ["transfer_lift"]);
-  assert.equal(result.status, "NEEDS_VERIFICATION");
-  assert.equal(result.confirmedCount, 0);
-  assert.equal(result.unknownCount, 1);
-  assert.equal(result.verificationQuestions.length, 1);
-});
-
-test("unavailable takes precedence over unknown; both generate questions", () => {
-  const result = matchClinic(clinics[0], ["transfer_lift", "quiet_waiting_area"]);
-  assert.equal(result.status, "NOT_READY");
-  assert.equal(result.unknownCount, 1);
-  assert.equal(result.unavailableCount, 1);
-  assert.equal(result.verificationQuestions.length, 2);
-});
-
-test("empty requirements produce INCOMPLETE for every clinic", async () => {
-  const response = await POST(request({ requirements: [] }));
-  assert.equal(response.status, 200);
-  const body = await response.json() as MatchResponse;
-  assert.equal(body.results.length, 3);
-  for (const result of body.results) {
-    assert.equal(result.status, "INCOMPLETE");
-    assert.equal(result.confirmedCount + result.unavailableCount + result.unknownCount, 0);
-    assert.deepEqual(result.checks, []);
-    assert.deepEqual(result.verificationQuestions, []);
+test("dataset has 12 complete, unique synthetic facilities with valid evidence and contact details", () => {
+  assert.equal(clinics.length, 12);
+  assert.equal(new Set(clinics.map((clinic) => clinic.id)).size, 12);
+  const coverage = new Set<string>();
+  for (const clinic of clinics) {
+    assert.equal(Object.keys(clinic.accommodations).length, REQUIREMENT_IDS.length);
+    assert.match(clinic.city, /fictional/);
+    assert.match(clinic.phone, /^\(212\) 555-01\d\d$/);
+    assert.ok(clinic.email.endsWith(".example"));
+    assert.ok(["verified", "self-reported", "unverified"].includes(clinic.verification));
+    assert.ok(Number.isFinite(clinic.location.latitude) && Number.isFinite(clinic.location.longitude));
+    for (const id of REQUIREMENT_IDS) {
+      const accommodation = clinic.accommodations[id];
+      assert.ok(["supported", "unsupported", "unknown"].includes(accommodation.status));
+      assert.ok(["verified", "self-reported", "unverified"].includes(accommodation.verification));
+      assert.ok(accommodation.detail.length > 20);
+      coverage.add(effectiveStatus(accommodation));
+    }
   }
+  assert.deepEqual([...coverage].sort(), ["supported", "unknown", "unsupported"]);
 });
 
-test("invalid requirement IDs produce a clear 400 error without echoing input", async () => {
-  const response = await POST(request({ requirements: ["private-health-text"] }));
-  assert.equal(response.status, 400);
-  const body = await response.json();
-  assert.match(body.error, /Invalid requirement ID/);
-  assert.equal(body.error.includes("private-health-text"), false);
+test("the two-minute demo has full, missing, and unknown matches", () => {
+  const results = matchClinics(clinics, DEMO_REQUIREMENTS);
+  assert.equal(results[0].score, 100);
+  assert.equal(results.find((item) => item.clinic.id === "willow-family-care")?.score, 100);
+  const missing = results.find((item) => item.clinic.id === "harborview-wellness")!;
+  assert.equal(missing.score, 50);
+  assert.equal(missing.unsupported[0].requirement, "adjustable_exam_table");
+  const unknown = results.find((item) => item.clinic.id === "tidewell-specialty-care")!;
+  assert.equal(unknown.score, 50);
+  assert.equal(unknown.unknown[0].requirement, "adjustable_exam_table");
+  assert.ok(results.indexOf(unknown) < results.indexOf(missing));
 });
 
-test("duplicate requirements are deduplicated in validation and matching", async () => {
-  assert.deepEqual(validateRequirements({ requirements: ["transfer_lift", "transfer_lift"] }), ["transfer_lift"]);
-  assert.equal(matchClinic(clinics[1], ["transfer_lift", "transfer_lift"]).confirmedCount, 1);
-  const response = await POST(request({ requirements: ["transfer_lift", "transfer_lift"] }));
-  const body = await response.json() as MatchResponse;
-  assert.ok(body.results.every((result) => result.checks.length === 1));
-});
-
-test("missing clinic capabilities default to UNKNOWN", () => {
-  const clinic: Clinic = { id: "missing", name: "Missing demo", description: "Fictional", capabilities: {} };
-  const result = matchClinic(clinic, ["adjustable_exam_table"]);
-  assert.equal(result.status, "NEEDS_VERIFICATION");
-  assert.equal(result.checks[0].status, "UNKNOWN");
-  assert.equal(result.confirmedCount, 0);
-});
-
-test("multiple clinic comparison returns all clinics and accurate counts", async () => {
-  const response = await POST(request({ requirements: ["accessible_entrance", "transfer_lift"] }));
-  assert.equal(response.status, 200);
-  assert.equal(response.headers.get("Cache-Control"), "no-store");
-  const body = await response.json() as MatchResponse;
-  assert.equal(body.synthetic, true);
-  assert.equal(body.results.length, 3);
-  assert.deepEqual(body.results.map((result) => result.clinicId), ["clinic-2", "clinic-1", "clinic-3"]);
-  for (const result of body.results) {
-    assert.equal(result.confirmedCount + result.unavailableCount + result.unknownCount, 2);
-    assert.ok(result.checks.every((check) => check.explanation.length > 0));
+test("self-reported and unverified assertions never count as confirmed support or absence", () => {
+  for (const status of ["supported", "unsupported"] as const) {
+    for (const verification of ["self-reported", "unverified"] as const) {
+      assert.equal(effectiveStatus({ status, verification, detail: "Test evidence." }), "unknown");
+    }
   }
+  assert.equal(effectiveStatus(undefined), "unknown");
 });
 
-test("ranking puts READY before NEEDS_VERIFICATION before NOT_READY", () => {
-  const results = matchClinics([...clinics].reverse(), ["transfer_lift"]);
-  assert.deepEqual(results.map((result) => result.status), ["READY", "NEEDS_VERIFICATION", "NOT_READY"]);
+test("scores count every requirement equally and round down", () => {
+  const match = matchClinic(clinics[0], ["wheelchair_entrance", "adjustable_exam_table", "reduced_lighting"]);
+  assert.equal(match.score, 66);
+  assert.equal(match.supported.length, 2);
+  assert.equal(match.unknown.length, 1);
+  assert.match(match.explanation, /2 of 3/);
 });
 
-test("matching is deterministic, stable on ties, and does not mutate input", () => {
-  const before = JSON.stringify(clinics);
-  const requirements = ["accessible_entrance"] as const;
-  const first = matchClinics(clinics, requirements);
-  assert.deepEqual(first, matchClinics(clinics, requirements));
-  assert.deepEqual(first.map((result) => result.clinicId), clinics.map((clinic) => clinic.id));
-  assert.equal(JSON.stringify(clinics), before);
+test("missing data is unknown rather than supported", () => {
+  const clinic = structuredClone(clinics[0]);
+  delete (clinic.accommodations as Partial<Clinic["accommodations"]>).wheelchair_entrance;
+  const match = matchClinic(clinic, ["wheelchair_entrance"]);
+  assert.equal(match.score, 0);
+  assert.equal(match.unknown.length, 1);
 });
 
-test("malformed JSON returns 400", async () => {
-  const response = await POST(new Request("http://localhost/api/match", { method: "POST", body: "{" }));
-  assert.equal(response.status, 400);
-  assert.match((await response.json()).error, /valid JSON/);
+test("empty requirements produce no percentage; duplicate internal inputs do not inflate a score", () => {
+  assert.equal(matchClinic(clinics[0], []).score, null);
+  assert.equal(matchClinic(clinics[0], ["wheelchair_entrance", "wheelchair_entrance"]).supported.length, 1);
 });
 
-test("invalid body shapes and non-string entries return 400", async () => {
-  for (const body of [null, [], {}, "text", { requirements: null }, { requirements: "transfer_lift" }, { requirements: [1] }, { requirements: [null] }, { requirements: [{}] }]) {
-    const response = await POST(request(body));
-    assert.equal(response.status, 400);
-    assert.equal(typeof (await response.json()).error, "string");
-  }
+test("ranking is deterministic, independent of catalog or requirement order", () => {
+  const ids = (list: typeof clinics, needs = DEMO_REQUIREMENTS) => matchClinics(list, needs).map((result) => result.clinic.id);
+  assert.deepEqual(ids(clinics), ids([...clinics].reverse(), [...DEMO_REQUIREMENTS].reverse()));
 });
 
-test("GET clinics returns exactly three fictional records with six capabilities each", async () => {
-  const response = GET();
-  assert.equal(response.status, 200);
-  const body = await response.json();
-  assert.equal(body.synthetic, true);
-  assert.equal(body.clinics.length, 3);
-  assert.equal(new Set(body.clinics.map((clinic: Clinic) => clinic.id)).size, 3);
-  for (const clinic of body.clinics) {
-    assert.match(clinic.description, /Fictional/);
-    assert.equal(Object.keys(clinic.capabilities).length, 6);
-  }
-});
-
-test("unexpected matching errors return a generic 500 without exposing details", async () => {
-  const failingBody = Object.defineProperty({}, "requirements", {
-    get() { throw new Error("sensitive internal information"); },
-  });
-  const response = await POST({ json: async () => failingBody } as Request);
-  assert.equal(response.status, 500);
-  assert.deepEqual(await response.json(), { error: "Unable to compare demonstration clinics." });
-});
-
-test("sparse requirements and inherited requirements are rejected", () => {
-  assert.throws(() => validateRequirements({ requirements: new Array(2) }));
-  assert.throws(() => validateRequirements(Object.create({ requirements: ["transfer_lift"] })));
-});
-
-test("IDs must match exactly; unsupported and prototype-like IDs return 400", async () => {
-  for (const id of ["", "TRANSFER_LIFT", "transfer_lift ", "__proto__", "constructor", "toString"]) {
-    const response = await POST(request({ requirements: [id] }));
-    assert.equal(response.status, 400);
-  }
-});
-
-test("deduplication preserves first-occurrence order and does not mutate requirements", () => {
-  const requirements = ["transfer_lift", "accessible_entrance", "transfer_lift"];
-  assert.deepEqual(validateRequirements({ requirements }), ["transfer_lift", "accessible_entrance"]);
-  assert.deepEqual(requirements, ["transfer_lift", "accessible_entrance", "transfer_lift"]);
-});
-
-test("inherited and corrupt capability entries remain UNKNOWN", () => {
-  const inherited: Clinic = {
-    id: "inherited", name: "Fictional demo", description: "Fictional",
-    capabilities: Object.create({ transfer_lift: "CONFIRMED" }),
-  };
-  assert.equal(matchClinic(inherited, ["transfer_lift"]).status, "NEEDS_VERIFICATION");
-  for (const value of [null, "YES", true]) {
-    const corrupt = {
-      ...inherited, capabilities: { transfer_lift: value },
-    } as unknown as Clinic;
-    const result = matchClinic(corrupt, ["transfer_lift"]);
-    assert.equal(result.unknownCount, 1);
-    assert.equal(result.checks[0].status, "UNKNOWN");
-  }
-});
-
-test("a mandatory unavailable feature cannot be offset by five confirmed features", () => {
-  const clinic: Clinic = {
-    id: "mandatory", name: "Fictional demo", description: "Fictional",
-    capabilities: Object.fromEntries(REQUIREMENT_IDS.map((id) => [
-      id, id === "transfer_lift" ? "UNAVAILABLE" : "CONFIRMED",
-    ])),
-  };
-  const result = matchClinic(clinic, REQUIREMENT_IDS);
-  assert.equal(result.status, "NOT_READY");
-  assert.equal(result.confirmedCount, 5);
-  assert.equal(result.unavailableCount, 1);
-});
-
-test("all 64 requirement subsets obey status, count, question, and ranking invariants", () => {
-  const ranks = { READY: 0, NEEDS_VERIFICATION: 1, NOT_READY: 2, INCOMPLETE: 3 };
-  for (let mask = 0; mask < 64; mask++) {
-    const requirements = REQUIREMENT_IDS.filter((_, index) => mask & (1 << index));
-    const results = matchClinics(clinics, requirements);
-    assert.equal(results.length, clinics.length);
-    assert.deepEqual(results, matchClinics(clinics, [...requirements].reverse()).map((result) => ({
-      ...result,
-      checks: [...result.checks].reverse(),
-      verificationQuestions: [...result.verificationQuestions].reverse(),
-    })));
-    for (const [index, result] of results.entries()) {
-      assert.equal(result.confirmedCount + result.unavailableCount + result.unknownCount, requirements.length);
-      assert.equal(result.verificationQuestions.length, result.unavailableCount + result.unknownCount);
-      assert.equal(result.status,
-        requirements.length === 0 ? "INCOMPLETE"
-          : result.unavailableCount > 0 ? "NOT_READY"
-            : result.unknownCount > 0 ? "NEEDS_VERIFICATION" : "READY");
-      if (index > 0) assert.ok(ranks[results[index - 1].status] <= ranks[result.status]);
+test("all single and paired requirements satisfy the scoring and partition invariants", () => {
+  for (const clinic of clinics) {
+    for (const first of REQUIREMENT_IDS) {
+      for (const second of REQUIREMENT_IDS) {
+        const selected = [...new Set([first, second])];
+        const result = matchClinic(clinic, selected);
+        assert.equal(result.supported.length + result.unsupported.length + result.unknown.length, selected.length);
+        assert.equal(result.score, Math.floor(result.supported.length / selected.length * 100));
+        if (result.unknown.length || result.unsupported.length) assert.ok(result.score! < 100);
+      }
     }
   }
 });
 
-test("clinic endpoint responses do not expose mutable data across requests", async () => {
-  const first = await GET().json();
-  first.clinics[0].capabilities.transfer_lift = "CONFIRMED";
-  const response = GET();
-  assert.equal(response.headers.get("Cache-Control"), "no-store");
-  const second = await response.json();
-  assert.equal(second.clinics[0].capabilities.transfer_lift, "UNKNOWN");
+test("validation accepts only known, unique requirement IDs without personal fields", () => {
+  assert.deepEqual(validateRequirements({ requirements: [] }), []);
+  assert.deepEqual(validateRequirements({ requirements: [...REQUIREMENT_IDS] }), [...REQUIREMENT_IDS]);
+  for (const invalid of [null, [], "needs", {}, { requirements: null }, { requirements: "wheelchair_entrance" }, { requirements: [7] }, { requirements: ["not_real"] }, { requirements: ["wheelchair_entrance", "wheelchair_entrance"] }, { requirements: [], diagnosis: "private" }, { requirements: Array(17).fill("wheelchair_entrance") }]) {
+    assert.throws(() => validateRequirements(invalid), ValidationError);
+  }
+});
+
+test("clinic API returns the catalog and supports search, specialty, evidence, and ID filtering", async () => {
+  const response = await getClinics(new Request("http://localhost/api/clinics"));
+  assert.equal(response.status, 200);
+  const payload = await response.json();
+  assert.equal(payload.total, 12);
+  assert.equal(payload.synthetic, true);
+  for (const [query, count] of [["q=willow", 1], ["specialty=Dental%20care", 2], ["verification=unverified", 2], ["id=willow-family-care", 1], ["q=doesnotexist", 0]] as const) {
+    assert.equal((await (await getClinics(new Request(`http://localhost/api/clinics?${query}`))).json()).total, count);
+  }
+});
+
+test("clinic API rejects invalid filters and missing facility IDs", async () => {
+  for (const query of ["verification=wrong", "specialty=wrong", `q=${"a".repeat(101)}`]) {
+    assert.equal((await getClinics(new Request(`http://localhost/api/clinics?${query}`))).status, 400);
+  }
+  assert.equal((await getClinics(new Request("http://localhost/api/clinics?id=missing"))).status, 404);
+});
+
+test("matching API returns real ranked matches and rejects malformed or oversized requests", async () => {
+  const response = await postMatch(request({ requirements: DEMO_REQUIREMENTS }));
+  assert.equal(response.status, 200);
+  assert.equal(response.headers.get("cache-control"), "no-store");
+  const payload = await response.json();
+  assert.equal(payload.results.length, 12);
+  assert.equal(payload.results[0].score, 100);
+  assert.equal(payload.synthetic, true);
+  assert.equal((await postMatch(request({ requirements: ["wrong"] }))).status, 400);
+  assert.equal((await postMatch(request({ requirements: [], patientName: "not accepted" }))).status, 400);
+  assert.equal((await postMatch(new Request("http://localhost/api/match", { method: "POST", body: "{}" }))).status, 415);
+  assert.equal((await postMatch(new Request("http://localhost/api/match", { method: "POST", headers: { "Content-Type": "application/jsonp" }, body: "{}" }))).status, 415);
+  assert.equal((await postMatch(new Request("http://localhost/api/match", { method: "POST", headers: { "Content-Type": "application/json" }, body: "{" }))).status, 400);
+  assert.equal((await postMatch(request({ requirements: ["a".repeat(5000)] }))).status, 413);
+});
+
+test("health endpoint reports the bundled dataset", async () => {
+  const response = await health();
+  assert.equal(response.status, 200);
+  const payload = await response.json();
+  assert.equal(payload.status, "ok");
+  assert.equal(payload.facilityCount, 12);
 });
