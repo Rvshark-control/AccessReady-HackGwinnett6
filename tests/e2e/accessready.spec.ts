@@ -1,6 +1,8 @@
 import { test, expect, type Page } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 
+const appPath = (path: string) => `${process.env.PLAYWRIGHT_BASE_PATH ?? ""}${path}`;
+
 async function assertNoOverflow(page: Page) {
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
 }
@@ -12,14 +14,16 @@ async function assertAccessible(page: Page) {
 test("homepage has real styling, working navigation, and accessible responsive content", async ({ page }, testInfo) => {
   const pageErrors: string[] = [];
   page.on("pageerror", (error) => pageErrors.push(error.message));
-  await page.goto("/");
+  await page.goto(appPath("/"));
   await expect(page.getByRole("heading", { level: 1 })).toContainText("Care that sees");
   await page.evaluate(() => document.fonts.ready);
   expect(await page.evaluate(() => [...document.fonts].some((font) => font.status === "loaded"))).toBe(true);
   await expect(page.locator(".hero-grid")).toHaveCSS("display", "grid");
-  await expect(page.locator(".hero-actions .button-primary")).toHaveCSS("background-color", "rgb(36, 90, 76)");
+  await expect(page.locator("body")).toHaveCSS("background-color", "rgb(13, 13, 18)");
+  await expect(page.locator(".hero-actions .button-primary")).toHaveCSS("color", "rgb(13, 13, 18)");
+  await expect(page.locator(".hero-actions .button-primary")).toHaveCSS("background-color", "rgb(255, 122, 0)");
   // This class is emitted by Tailwind, independently of the custom stylesheet.
-  await expect(page.locator(".brand .text-teal-800").first()).toHaveCSS("color", "oklch(0.437 0.078 188.216)");
+  await expect(page.locator(".brand .text-pumpkin").first()).toHaveCSS("color", "rgb(255, 122, 0)");
   const stylesheets = await page.locator('link[rel="stylesheet"]').evaluateAll((links) => links.map((link) => (link as HTMLLinkElement).href));
   expect(stylesheets.length).toBeGreaterThan(0);
   for (const stylesheet of stylesheets) expect((await page.request.get(stylesheet)).status()).toBe(200);
@@ -35,7 +39,7 @@ test("homepage has real styling, working navigation, and accessible responsive c
 test("complete demo matches, details, comparison, and persistence", async ({ page }, testInfo) => {
   let matchCalls = 0;
   page.on("request", (request) => { if (request.url().endsWith("/api/match") && request.method() === "POST") matchCalls++; });
-  await page.goto("/");
+  await page.goto(appPath("/"));
   await page.getByRole("link", { name: "Try the demo 2 min" }).click();
   await expect(page.getByRole("checkbox", { name: "Wheelchair-accessible entrance" })).toBeChecked();
   await expect(page.getByRole("checkbox", { name: "Adjustable-height exam tables" })).toBeChecked();
@@ -69,7 +73,7 @@ test("complete demo matches, details, comparison, and persistence", async ({ pag
 });
 
 test("profile edits, all categories, filters, empty results, and unknown evidence", async ({ page }, testInfo) => {
-  await page.goto("/find-care");
+  await page.goto(appPath("/find-care"));
   await expect(page.getByRole("heading", { name: "12 facilities to explore" })).toBeVisible();
   await expect(page.locator(".facility-card").first().locator(".score")).toContainText("Your needs, your match");
   await page.getByRole("checkbox", { name: "Wheelchair-accessible entrance" }).check();
@@ -112,7 +116,7 @@ test("profile edits, all categories, filters, empty results, and unknown evidenc
 });
 
 test("comparison can be built directly, limited to three, removed, and cleared", async ({ page }) => {
-  await page.goto("/compare");
+  await page.goto(appPath("/compare"));
   await expect(page.getByRole("heading", { name: "Your next step, side by side." })).toBeVisible();
   await page.getByRole("button", { name: "Compare Willow Family Care: add to comparison" }).click();
   await expect(page.getByText("Add one more facility below")).toBeVisible();
@@ -128,7 +132,7 @@ test("comparison can be built directly, limited to three, removed, and cleared",
 
 test("API errors are accessible and recoverable without showing stale matches", async ({ page }) => {
   await page.route("**/api/match", (route) => route.fulfill({ status: 503, contentType: "application/json", body: JSON.stringify({ error: "Unavailable" }) }));
-  await page.goto("/find-care");
+  await page.goto(appPath("/find-care"));
   await expect(page.getByRole("alert").filter({ hasText: "We couldn’t load your matches" })).toBeVisible();
   await expect(page.locator(".facility-card")).toHaveCount(0);
   await assertAccessible(page);
@@ -139,7 +143,12 @@ test("API errors are accessible and recoverable without showing stale matches", 
 
 test("about, keyboard navigation, reduced motion, mobile menu, and not-found page", async ({ page, isMobile }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
-  await page.goto("/");
+  await page.goto(appPath("/"));
+  await expect(page.locator(".hero-actions .button-primary")).toHaveCSS("transition-duration", "0s");
+  if (!isMobile) {
+    await page.locator(".hero-actions .button-primary").hover();
+    await expect(page.locator(".hero-actions .button-primary")).toHaveCSS("transform", "none");
+  }
   await page.keyboard.press("Tab");
   await expect(page.getByRole("link", { name: "Skip to main content" })).toBeFocused();
   await expect(page.getByRole("link", { name: "Skip to main content" })).toHaveCSS("outline-style", "solid");
@@ -156,25 +165,25 @@ test("about, keyboard navigation, reduced motion, mobile menu, and not-found pag
   await expect(page.locator("html")).toHaveCSS("scroll-behavior", "auto");
   await assertNoOverflow(page);
   await assertAccessible(page);
-  await page.goto("/facilities/does-not-exist");
+  await page.goto(appPath("/facilities/does-not-exist"));
   await expect(page.getByRole("heading", { name: "We couldn’t find that page." })).toBeVisible();
   await page.getByRole("link", { name: "Explore facilities", exact: true }).click();
   await expect(page.getByRole("heading", { name: "12 facilities to explore" })).toBeVisible();
 });
 
 test("deployed HTTP endpoints validate requests and return ranked synthetic data", async ({ request }) => {
-  const health = await request.get("/api/health");
+  const health = await request.get(appPath("/api/health"));
   expect(health.status()).toBe(200);
   expect((await health.json()).facilityCount).toBe(12);
-  const catalog = await request.get("/api/clinics?q=willow");
+  const catalog = await request.get(appPath("/api/clinics?q=willow"));
   expect((await catalog.json()).clinics[0].id).toBe("willow-family-care");
-  const match = await request.post("/api/match", { data: { requirements: ["wheelchair_entrance", "adjustable_exam_table"] } });
+  const match = await request.post(appPath("/api/match"), { data: { requirements: ["wheelchair_entrance", "adjustable_exam_table"] } });
   expect(match.status()).toBe(200);
   const payload = await match.json();
   expect(payload.synthetic).toBe(true);
   expect(payload.results).toHaveLength(12);
   expect(payload.results[0].score).toBe(100);
-  expect((await request.post("/api/match", { data: { requirements: ["not-real"] } })).status()).toBe(400);
-  expect((await request.post("/api/match", { data: "{", headers: { "Content-Type": "application/json" } })).status()).toBe(400);
-  expect((await request.get("/api/clinics?id=not-real")).status()).toBe(404);
+  expect((await request.post(appPath("/api/match"), { data: { requirements: ["not-real"] } })).status()).toBe(400);
+  expect((await request.post(appPath("/api/match"), { data: "{", headers: { "Content-Type": "application/json" } })).status()).toBe(400);
+  expect((await request.get(appPath("/api/clinics?id=not-real"))).status()).toBe(404);
 });

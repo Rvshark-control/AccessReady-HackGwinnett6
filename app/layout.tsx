@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   title: { default: "AccessReady — Care that fits you", template: "%s | AccessReady" },
   description: "Find healthcare that fits your accessibility requirements. Explore transparent matches and compare synthetic facilities in the AccessReady demo.",
 };
-export const viewport: Viewport = { themeColor: "#153d3b", width: "device-width", initialScale: 1 };
+export const viewport: Viewport = { themeColor: "#0d0d12", colorScheme: "dark", width: "device-width", initialScale: 1 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return <html lang="en" className={`${dmSans.variable} ${lora.variable}`}><body><ProfileProvider>

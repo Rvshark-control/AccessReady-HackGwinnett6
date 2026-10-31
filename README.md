@@ -42,6 +42,12 @@ The workspace removes `/ports/4173` before forwarding requests, so the preview s
 
 The build and development commands explicitly use Next.js's webpack integration with the standard Tailwind 4 PostCSS plugin. The global stylesheet imports Tailwind through `@import "tailwindcss"`. DM Sans and Lora are bundled locally through `next/font/local`, with their SIL Open Font Licenses in `public/fonts/`. Styling and fonts are served by the app; there are no external font requests.
 
+## Halloween theme
+
+The shared palette in `app/globals.css` uses a midnight canvas (`#0D0D12`), pumpkin primary actions (`#FF7A00`), purple accents (`#A855F7`), and off-white text (`#F3F4F6`). Dark glass cards have subtle orange/purple borders; opaque surfaces provide a fallback when backdrop filtering is unavailable. The clinic illustration and Boo use the same palette.
+
+Primary buttons use dark text for a 7.4:1 contrast ratio. Purple labels use a lighter purple, and barrier text uses a lighter red, to retain contrast at small sizes. Green verification, amber uncertainty, and red barrier indicators always include text or icons. Captions and labels are at least 12 CSS pixels, focus rings remain visible, and the 200 ms hover effects respect reduced-motion preferences. Automated checks cover selected WCAG A/AA rules, not full conformance.
+
 ## Two-minute demonstration
 
 1. Open the homepage and choose **Try the demo**.
@@ -155,6 +161,15 @@ FONTCONFIG_FILE="$PWD/scripts/fonts.conf" npm run test:e2e
 This optional test-only configuration points Chromium at the bundled font files. It does not change production behavior.
 
 The browser suite launches a production server on port 3100 and shuts it down afterward. Run the build first and leave that port free, or select another port with `PLAYWRIGHT_PORT=3101 npm run test:e2e`. It tests desktop Chromium and Chromium with iPhone 13 viewport/touch emulation; this is not a claim of Safari or physical-device coverage.
+
+To test the already-running workspace preview without starting another port, use:
+
+```bash
+PLAYWRIGHT_BASE_URL=http://127.0.0.1:4173 PLAYWRIGHT_BASE_PATH=/ports/4173/accessready-v2 npm run test:e2e
+PLAYWRIGHT_BASE_URL=http://127.0.0.1:4173 npm run test:e2e:preview
+```
+
+These checks leave the preview running. The usual test server serves a root-path build and is only for automation; its port is not a workspace preview link. Use **4173** in the Ports panel.
 
 After running the port-preview build, verify the workspace-specific path handling with:
 

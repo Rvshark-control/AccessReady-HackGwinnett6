@@ -23,8 +23,10 @@ test("forwarded preview retains styling, fonts, navigation, and the complete dem
   await page.evaluate(() => document.fonts.ready);
   expect(await page.evaluate(() => [...document.fonts].filter((font) => font.status === "loaded").length)).toBeGreaterThanOrEqual(2);
   await expect(page.locator(".hero-grid")).toHaveCSS("display", "grid");
-  await expect(page.locator(".hero-actions .button-primary")).toHaveCSS("background-color", "rgb(36, 90, 76)");
-  await expect(page.locator(".brand .text-teal-800").first()).toHaveCSS("color", "oklch(0.437 0.078 188.216)");
+  await expect(page.locator("body")).toHaveCSS("background-color", "rgb(13, 13, 18)");
+  await expect(page.locator(".hero-actions .button-primary")).toHaveCSS("color", "rgb(13, 13, 18)");
+  await expect(page.locator(".hero-actions .button-primary")).toHaveCSS("background-color", "rgb(255, 122, 0)");
+  await expect(page.locator(".brand .text-pumpkin").first()).toHaveCSS("color", "rgb(255, 122, 0)");
   const stylesheets = await page.locator('link[rel="stylesheet"]').evaluateAll((links) => links.map((link) => (link as HTMLLinkElement).href));
   expect(stylesheets.length).toBeGreaterThan(0);
   for (const url of stylesheets) {

@@ -11,7 +11,7 @@ export default defineConfig({
   reporter: [["list"]],
   outputDir: "test-results/preview",
   use: {
-    baseURL: "http://127.0.0.1:3200",
+    baseURL: process.env.PLAYWRIGHT_BASE_URL ?? "http://127.0.0.1:3200",
     trace: "retain-on-failure",
     screenshot: "only-on-failure",
     launchOptions: {
@@ -22,7 +22,8 @@ export default defineConfig({
     { name: "desktop", use: { ...devices["Desktop Chrome"], viewport: { width: 1440, height: 1000 } } },
     { name: "mobile", use: { ...devices["iPhone 13"], defaultBrowserType: "chromium" } },
   ],
-  webServer: [
+  // Reuse the live preview when supplied; otherwise exercise the proxy fixture.
+  webServer: process.env.PLAYWRIGHT_BASE_URL ? undefined : [
     {
       command: "node scripts/preview-server.mjs 3199",
       env: { NEXT_PUBLIC_ACCESSREADY_BASE_PATH: `${workspacePrefix}/accessready-v2` },

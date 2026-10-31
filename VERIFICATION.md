@@ -2,7 +2,27 @@
 
 Verified on October 31, 2026 in the isolated `rebuild/accessready-v2` worktree.
 
-## Actual results
+## Halloween theme verification
+
+The Halloween palette now covers all five page types, navigation, forms, glass cards, actions, comparison, status labels, error/loading states, and the original SVG artwork. The live preview remains on **4173**. Tests can reuse that preview through `PLAYWRIGHT_BASE_URL` and `PLAYWRIGHT_BASE_PATH`, without launching an extra workspace port.
+
+| Check | Result |
+| --- | --- |
+| TypeScript and existing backend tests | Passed; 13 backend tests |
+| Production and preview builds | Passed; the final phone layout was built into `.next-preview-4173` |
+| Complete Google Chrome suite on 4173 | 14 passed, 0 failed; desktop and mobile layouts |
+| Final preview assets and navigation | 4 passed, 0 failed against the running 4173 preview; CSS/fonts, correct asset prefixes, redirects, cache prevention, demo, and comparison |
+| Final homepage adjustment | 2 passed, 0 failed after placing the mobile illustration card in normal document flow; desktop/mobile styling and axe checks |
+| Automated accessibility | No violations for the selected axe WCAG A/AA rules in the tested homepage, Find Care, error, detail, comparison, and About states |
+| Additional responsive checks | 25 route/viewport combinations checked at 320, 360, 768, 1024, and 1920 CSS pixels; no document overflow or unintended off-screen controls |
+| Focus and motion | Keyboard focus remains visible; reduced motion disables hover scaling/transitions; Chrome forced-color emulation retained the skip-link focus outline |
+| Visual review | Desktop/mobile homepage, Find Care, facility details, comparison, and narrow/tablet screenshots inspected |
+
+Primary button text has a calculated contrast ratio of **7.42:1**. Muted text on the purple surface is **8.43:1**; green verification text is **6.60:1** on its badge background. Barrier text uses `#FF7B86` for **7.02:1** contrast on the card surface, with `#EF4444` used for error borders. Captions and labels are at least 12 CSS pixels. Statuses include text/icons as well as color.
+
+These Chrome runs used the official Chrome for Testing binary on Linux with desktop/mobile emulation. They used the existing preview directly; the separate proxy fixture remains available for routing regression tests. Native Windows automation and a full manual accessibility audit were not performed.
+
+## Earlier rebuild and forwarding results
 
 | Check | Result |
 | --- | --- |
